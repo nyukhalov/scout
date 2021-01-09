@@ -7,7 +7,7 @@ Self-Driving RC Car
 - Install [ROS Noetic](http://wiki.ros.org/noetic/Installation)
 - Install the following libraries
   ```bash
-  sudo apt install python-is-python3 python3-rosdep
+  sudo apt install python-is-python3 python3-rosdep ros-noetic-joy jstest-gtk
   ```
 - Create a catkin workspace
   ```bash
@@ -20,6 +20,10 @@ Self-Driving RC Car
   rosdep install --from-paths src --ignore-src -r
   catkin_make
   ```
+- Modify `ds4drv/backends/hidraw.py` as in https://github.com/chrippa/ds4drv/pull/105/files
+  ```
+  sudo vim /usr/local/lib/python3.8/dist-packages/ds4drv/backends/hidraw.py
+  ```
 - Define the following environment variables
   ```bash
   export SCOUT_CATKIN_WS_PATH="/path/to/catkin_ws"
@@ -31,7 +35,19 @@ Self-Driving RC Car
 
 ## Running
 
-1. Run the Scout stack
+1. Run DualShock4 driver
+  ```bash
+  sudo ds4drv --hidraw
+  ```
+2. Run the Scout stack
    ```bash
    roslaunch scout scout.launch
    ```
+
+## Debugging DualShock4
+
+Make sure `ds4drv` is running, then run
+
+```bash
+jstest-gtk
+```
