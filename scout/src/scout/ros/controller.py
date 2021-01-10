@@ -6,29 +6,20 @@ import rospy
 from nav_msgs.msg import Path
 from sensor_msgs.msg import Joy
 from scout.lib.driver import maestro as m
+from scout.lib.driver.pwm_controller import  PwmController
 
 
 class RosController:
     def __init__(self):
-        self._ch_steer = 0
-        self._ch_throttle = 5
-
         self.servo = m.Controller('/dev/ttyACM0')
-
-        # Speed is measured as 0.25microseconds/10milliseconds
-        self.servo.setSpeed(self._ch_steer, 50)
-        # Valid values are from 0 to 255. 0=unrestricted, 1 is slowest start.
-        # A value of 1 will take the servo about 3s to move between 1ms to 2ms range
-        self.servo.setAccel(self._ch_steer, 0)
-
-        self.servo.setSpeed(self._ch_throttle, 0)
-        self.servo.setAccel(self._ch_throttle, 0)
+        self.steering_ctrl = PwmController(self.servo, channel=0, speed=50, accel=0, min_val=5000, max_val=7000)
+        self.throttle_ctrl = PwmController(self.servo, channel=5, speed=0, accel=0, min_val=5000, max_val=6400)
 
         self._steering_target = 6000
         self._throttle_target = 6000
 
         self._joy_sub = rospy.Subscriber(
-            f"/j1/joy",
+            f"/j0/joy",
             Joy,
             self._on_joy_input
         )
@@ -51,8 +42,8 @@ class RosController:
             self._destroy()
 
     def _destroy(self) -> None:
-        self.servo.setTarget(self._ch_steer, 6000)
-        self.servo.setTarget(self._ch_throttle, 6000)
+        self.steering_ctrl.set_target_by_factor(0)
+        self.throttle_ctrl.set_target_by_factor(0)
 
     def _on_joy_input(self, msg: Joy) -> None:
         #rospy.loginfo(msg.buttons)
@@ -75,12 +66,8 @@ class RosController:
         new_steering_val = msg.axes[ax_left_left_right]
         if self._steering_joy_val is None or new_steering_val != self._steering_joy_val:
             self._steering_joy_val = new_steering_val
-            # For servos, target represents the pulse width in of quarter-microseconds
-            # Servo center is at 1500 microseconds, or 6000 quarter-microseconds
-            # Typcially valid servo range is 3000 to 9000 quarter-microsecond
             assert -1.0 <= self._steering_joy_val <= 1.0
-            self._steering_target = int(6000 - self._steering_joy_val * 1000)
-            self.servo.setTarget(self._ch_steer, self._steering_target)
+            self.steering_ctrl.set_target_by_factor(-self._steering_joy_val)
 
         new_throttle_val = msg.axes[ax_r2]
         if self._throttle_joy_val is None or new_throttle_val != self._throttle_joy_val:
@@ -91,9 +78,7 @@ class RosController:
             if self._throttle_joy_initialized:
                 assert -1.0 <= self._throttle_joy_val <= 1.0
                 factor = (1 - self._throttle_joy_val) / 2 # 0 .. 1
-                rospy.loginfo(factor)
-                self._throttle_target = int(6000 + factor * 400)
-                self.servo.setTarget(self._ch_throttle, self._throttle_target)
+                self.throttle_ctrl.set_target_by_factor(factor)
 
     def _do_something(self) -> None:
         pass
