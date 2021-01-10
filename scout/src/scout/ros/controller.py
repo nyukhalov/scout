@@ -13,7 +13,7 @@ class RosController:
     def __init__(self):
         self.servo = m.Controller('/dev/ttyACM0')
         self.steering_ctrl = PwmController(self.servo, channel=0, speed=50, accel=0, min_val=5000, max_val=7000)
-        self.throttle_ctrl = PwmController(self.servo, channel=5, speed=0, accel=0, min_val=5000, max_val=6400)
+        self.throttle_ctrl = PwmController(self.servo, channel=5, speed=0, accel=0, min_val=5500, max_val=6400)
 
         self._steering_target = 6000
         self._throttle_target = 6000
@@ -27,6 +27,8 @@ class RosController:
         self._steering_joy_val = None
         self._throttle_joy_initialized = False
         self._throttle_joy_val = None
+        self._reverse_joy_initialized = False
+        self._reverse_joy_val = None
 
     def run(self) -> None:
         rospy.loginfo(f"Starting controller")
@@ -46,9 +48,6 @@ class RosController:
         self.throttle_ctrl.set_target_by_factor(0)
 
     def _on_joy_input(self, msg: Joy) -> None:
-        #rospy.loginfo(msg.buttons)
-        #rospy.loginfo(msg.axes)
-
         ax_left_left_right = 0
         ax_left_up_down = 1
         ax_right_left_right = 2
@@ -79,6 +78,17 @@ class RosController:
                 assert -1.0 <= self._throttle_joy_val <= 1.0
                 factor = (1 - self._throttle_joy_val) / 2 # 0 .. 1
                 self.throttle_ctrl.set_target_by_factor(factor)
+
+        new_reverse_val = msg.axes[ax_l2]
+        if self._reverse_joy_val is None or new_reverse_val != self._reverse_joy_val:
+            self._reverse_joy_val = new_reverse_val
+            if not self._reverse_joy_initialized and self._reverse_joy_val != 0:
+                self._reverse_joy_initialized = True
+
+            if self._reverse_joy_initialized:
+                assert -1.0 <= self._reverse_joy_val <= 1.0
+                factor = (1 - self._reverse_joy_val) / 2 # 0 .. 1
+                self.throttle_ctrl.set_target_by_factor(-factor)
 
     def _do_something(self) -> None:
         pass
