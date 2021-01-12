@@ -33,14 +33,6 @@ Self-Driving RC Car
   ```
   sudo vim /usr/local/lib/python3.8/dist-packages/ds4drv/backends/hidraw.py
   ```
-- Define the following environment variable
-  ```bash
-  export SCOUT_CATKIN_WS_PATH="/path/to/catkin_ws"
-  ```
-- Source the development script
-  ```bash
-  source /path/to/scout/scripts/devel.zsh
-  ```
 - Configure the lidar alias
   ```bash
   roscd ydlidar/startup
@@ -55,9 +47,32 @@ Self-Driving RC Car
   sudo ds4drv --hidraw
   ```
 2. Run the Scout stack
-   ```bash
-   roslaunch scout scout.launch
-   ```
+  ```bash
+  roslaunch scout scout.launch
+  ```
+
+## Set up dev environment
+
+- Create and initialize a catkin workspace
+  ```bash
+  mkdir catkin_ws/src
+  cd catkin_ws/src
+  ln -s /path/to/scout
+  git clone -b X4 --depth 1 https://github.com/YDLIDAR/ydlidar_ros.git
+  ```
+- Build and intall
+  ```bash
+  source /opt/ros/noetic/setup.zsh
+  catkin_make
+  ```
+- Define the following environment variable
+  ```bash
+  export SCOUT_CATKIN_WS_PATH="/path/to/catkin_ws"
+  ```
+- Source the development script
+  ```bash
+  source /path/to/scout/scripts/devel.zsh
+  ```
 
 ## Debugging DualShock4
 
