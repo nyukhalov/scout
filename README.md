@@ -23,17 +23,11 @@ Self-Driving RC Car
   rosdep update
   rosdep install --from-paths src --ignore-src --rosdistro=noetic -r -y
   ```
-- Create a catkin workspace
+- Build and install
   ```bash
-  mkdir catkin_ws/src
-  cd catkin_ws/src
-  ln -s /path/to/scout/scout
-  ln -s /path/to/scout/ydlidar_ros
-  cd ..
-  sudo rosdep init
-  rosdep update
-  rosdep install --from-paths src --ignore-src -r
+  source /opt/ros/noetic/setup.zsh
   catkin_make
+  source devel/setup.zsh
   ```
 - Modify `ds4drv/backends/hidraw.py` as in https://github.com/chrippa/ds4drv/pull/105/files
   ```
