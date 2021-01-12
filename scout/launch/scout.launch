@@ -13,5 +13,7 @@
       <param name="dev" value="/dev/input/js0" />
     </node>
   </group>
+
+  <include file="$(find ydlidar)/launch/lidar.launch" />
 </launch>
 

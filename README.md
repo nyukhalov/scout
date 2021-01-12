@@ -13,7 +13,8 @@ Self-Driving RC Car
   ```bash
   mkdir catkin_ws/src
   cd catkin_ws/src
-  ln -s /path/to/carla-ai
+  ln -s /path/to/scout/scout
+  ln -s /path/to/scout/ydlidar_ros
   cd ..
   sudo rosdep init
   rosdep update
@@ -24,13 +25,19 @@ Self-Driving RC Car
   ```
   sudo vim /usr/local/lib/python3.8/dist-packages/ds4drv/backends/hidraw.py
   ```
-- Define the following environment variables
+- Define the following environment variable
   ```bash
   export SCOUT_CATKIN_WS_PATH="/path/to/catkin_ws"
   ```
 - Source the development script
   ```bash
   source /path/to/scout/scripts/devel.zsh
+  ```
+- Configure the lidar alias
+  ```bash
+  roscd ydlidar/startup
+  sudo chmod 777 ./*
+  sudo sh initenv.sh
   ```
 
 ## Running
