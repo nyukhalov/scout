@@ -9,6 +9,20 @@ Self-Driving RC Car
   ```bash
   sudo apt install python-is-python3 python3-rosdep python3-wstool ros-noetic-joy jstest-gtk
   ```
+- Create and initialize a catkin workspace
+  ```bash
+  mkdir catkin_ws
+  cd catkin_ws
+  wstool init src
+  wstool merge -t src https://raw.githubusercontent.com/nyukhalov/scout/master/scout_ros.rosinstall
+  wstool update -t src
+  ```
+- Install dependencies. `sudo rosdep init` will print an error if you have already executed it since installing ROS. This error can be ignored.
+  ```bash
+  sudo rosdep init
+  rosdep update
+  rosdep install --from-paths src --ignore-src --rosdistro=noetic -r -y
+  ```
 - Create a catkin workspace
   ```bash
   mkdir catkin_ws/src

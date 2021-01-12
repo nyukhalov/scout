@@ -10,15 +10,15 @@
   <buildtool_depend>python3-catkin-pkg</buildtool_depend>
 
   <!-- Other packages -->
-  <depend>ydlidar_ros</depend>
+  <depend>ydlidar</depend>
 
   <!-- Misc -->
   <depend>rospy</depend>
   <depend>roslaunch</depend>
 
   <!-- Messages -->
-  <depend>message_generation</depend>
-  <depend>message_runtime</depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
   <depend>std_msgs</depend>
   <depend>sensor_msgs</depend>
 
