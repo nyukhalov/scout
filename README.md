@@ -7,7 +7,7 @@ Self-Driving RC Car
 - Install [ROS Noetic](http://wiki.ros.org/noetic/Installation)
 - Install the following libraries
   ```bash
-  sudo apt install python-is-python3 python3-rosdep ros-noetic-joy jstest-gtk
+  sudo apt install python-is-python3 python3-rosdep python3-wstool ros-noetic-joy jstest-gtk
   ```
 - Create a catkin workspace
   ```bash

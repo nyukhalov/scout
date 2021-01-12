@@ -9,28 +9,27 @@
   <buildtool_depend>catkin</buildtool_depend>
   <buildtool_depend>python3-catkin-pkg</buildtool_depend>
 
-  <build_depend>rospy</build_depend>
-  <build_depend>roslaunch</build_depend>
-  <build_depend>message_generation</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_export_depend>rospy</build_export_depend>
+  <!-- Other packages -->
+  <depend>ydlidar_ros</depend>
 
-  <exec_depend>rospy</exec_depend>
-  <exec_depend>sensor_msgs</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
-
-  <!-- Python dependencies -->
-  <exec_depend>python3-pygame</exec_depend>
-  <exec_depend>python3-numpy</exec_depend>
-  <exec_depend>python3-yaml</exec_depend>
-  <exec_depend>python3-shapely</exec_depend>
-  <exec_depend>python3-networkx</exec_depend>
-  <exec_depend>python3-serial</exec_depend>
-  <exec_depend>ds4drv-pip</exec_depend>
+  <!-- Misc -->
+  <depend>rospy</depend>
+  <depend>roslaunch</depend>
 
   <!-- Messages -->
-  <exec_depend>message_runtime</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
+  <depend>message_generation</depend>
+  <depend>message_runtime</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+
+  <!-- Python dependencies -->
+  <depend>python3-pygame</depend>
+  <depend>python3-numpy</depend>
+  <depend>python3-yaml</depend>
+  <depend>python3-shapely</depend>
+  <depend>python3-networkx</depend>
+  <depend>python3-serial</depend>
+  <exec_depend>ds4drv-pip</exec_depend>
 
   <export>
   </export>
