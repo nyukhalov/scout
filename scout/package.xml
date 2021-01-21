@@ -11,6 +11,10 @@
 
   <!-- Other packages -->
   <depend>ydlidar</depend>
+  <depend>realsense2_camera</depend>
+  <depend>imu_filter_madgwick</depend>
+  <depend>robot_localization</depend>
+  <depend>rtabmap_ros</depend>
 
   <!-- Misc -->
   <depend>rospy</depend>
