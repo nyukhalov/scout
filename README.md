@@ -91,3 +91,7 @@ Make sure `ds4drv` is running, then run
 ```bash
 jstest-gtk
 ```
+
+## Additional information
+
+- [Building a Docker image](./docs/docker-build.md)
