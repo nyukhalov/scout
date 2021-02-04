@@ -10,11 +10,12 @@
   <buildtool_depend>python3-catkin-pkg</buildtool_depend>
 
   <!-- Other packages -->
-  <depend>ydlidar</depend>
-  <depend>realsense2_camera</depend>
-  <depend>imu_filter_madgwick</depend>
-  <depend>robot_localization</depend>
-  <depend>rtabmap_ros</depend>
+  <depend>joy</depend>
+  <!-- <depend>ydlidar</depend> -->
+  <!-- <depend>realsense2_camera</depend> -->
+  <!-- <depend>imu_filter_madgwick</depend> -->
+  <!-- <depend>robot_localization</depend> -->
+  <!-- <depend>rtabmap_ros</depend> -->
 
   <!-- Misc -->
   <depend>rospy</depend>
@@ -30,10 +31,10 @@
   <depend>python3-pygame</depend>
   <depend>python3-numpy</depend>
   <depend>python3-yaml</depend>
-  <depend>python3-shapely</depend>
-  <depend>python3-networkx</depend>
   <depend>python3-serial</depend>
   <exec_depend>ds4drv-pip</exec_depend>
+  <!-- <depend>python3-shapely</depend> -->
+  <!-- <depend>python3-networkx</depend> -->
 
   <export>
   </export>

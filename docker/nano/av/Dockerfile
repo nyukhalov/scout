@@ -15,12 +15,22 @@ RUN cd ./src && \
     git clone --depth 1 --no-tags https://github.com/ros/diagnostics.git && \
     git clone --depth 1 --no-tags https://github.com/ros-drivers/joystick_drivers.git && \
     apt install -y --no-install-recommends \
+        python3-pip \
         joystick \
         libusb-dev \
         libbluetooth-dev \
         libcwiid-dev \
         libspnav-dev \
-        bluez
+        bluez && \
+    pip3 install wheel && \
+    git clone https://github.com/chrippa/ds4drv.git && \
+    cd ds4drv && \
+    python3 setup.py sdist && \
+    pip3 install dist/*.tar.gz --system && \
+    cd .. && \
+    rm -rf ds4drv
+
+COPY ./scout /ros_ws/src/scout/
 
 # building all ROS packages
 RUN . /opt/ros/noetic/setup.sh && \

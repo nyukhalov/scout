@@ -1,0 +1,12 @@
+<!-- -->
+<launch>
+  <node pkg="scout" type="ds4drv_node" name="scout_ds4drv">
+  </node>
+
+  <group ns="j0">
+    <node name="ds4_joystick" pkg="joy" type="joy_node">
+      <param name="dev" value="/dev/input/js0" />
+    </node>
+  </group>
+</launch>
+
