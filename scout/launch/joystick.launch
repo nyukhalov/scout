@@ -1,0 +1,17 @@
+<!-- -->
+<launch>
+  <arg name="role_name" default="ego_vehicle"/>
+  <arg name="sensor_definition_file" default="$(find scout)/config/sensors.json"/>
+
+  <node pkg="scout" type="controller_node" name="scout_controller_$(arg role_name)" output="screen">
+    <param name="role_name" value="$(arg role_name)" />
+    <param name="sensor_definition_file" value="$(arg sensor_definition_file)" />
+  </node>
+
+  <group ns="j0">
+    <node name="ds4_joystick" pkg="joy" type="joy_node">
+      <param name="dev" value="/dev/input/js0" />
+    </node>
+  </group>
+</launch>
+
