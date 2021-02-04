@@ -1,0 +1,10 @@
+[Unit]
+Description=ds4drv daemon
+
+[Service]
+User=roman
+ExecStart=/bin/bash -c "/usr/local/bin/ds4drv --hidraw"
+Restart=on-abort
+
+[Install]
+WantedBy=default.target

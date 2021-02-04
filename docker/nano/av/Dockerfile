@@ -22,7 +22,7 @@ RUN cd ./src && \
         libcwiid-dev \
         libspnav-dev \
         bluez && \
-    pip3 install wheel && \
+    pip3 install wheel pyserial && \
     git clone https://github.com/chrippa/ds4drv.git && \
     cd ds4drv && \
     python3 setup.py sdist && \
@@ -36,6 +36,13 @@ COPY ./scout /ros_ws/src/scout/
 RUN . /opt/ros/noetic/setup.sh && \
     catkin_make
 
+# other tools
+RUN apt install -y vim
+
 # cleanup
 RUN rm -rf /var/lib/apt/lists/*
 
+# setup entrypoint
+COPY ./docker/scripts/ros_entrypoint_av.sh /ros_entrypoint_av.sh
+RUN echo "source /ros_ws/devel/setup.bash" >> /root/.bashrc
+ENTRYPOINT ["/ros_entrypoint_av.sh"]

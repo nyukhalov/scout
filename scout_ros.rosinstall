@@ -1,2 +1,0 @@
-- git: {local-name: ydlidar_ros, uri: 'https://github.com/YDLIDAR/ydlidar_ros.git', version: 'X4'}
-- git: {local-name: scout_ros, uri: 'https://github.com/nyukhalov/scout.git', version: 'master'}
