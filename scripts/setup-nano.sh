@@ -7,7 +7,7 @@ apt update && apt install -y git python3-pip
 pip3 install setuptools
 
 # configure rootless docker
-groupadd docker
+groupadd docker || true
 usermod -aG docker $USER
 newgrp docker
 
