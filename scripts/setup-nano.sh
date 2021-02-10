@@ -3,7 +3,7 @@
 set -e
 
 # install tools
-apt update && apt install -y git python3-pip
+apt update && apt install -y curl git python3-pip
 pip3 install setuptools
 
 # configure rootless docker
@@ -12,7 +12,7 @@ usermod -aG docker $USER
 newgrp docker
 
 # install ds4drv
-git clone https://github.com/chrippa/ds4drv.git
+git clone --depth 1 https://github.com/chrippa/ds4drv.git
 cd ds4drv
 python3 setup.py sdist
 pip3 install dist/ds4drv-0.5.1.tar.gz --system --upgrade
