@@ -3,7 +3,7 @@
 set -e
 
 # install tools
-apt update && apt install -y curl git python3-pip
+apt update && apt install -y curl git python3-pip bluez-tools
 pip3 install setuptools
 
 # configure rootless docker
@@ -26,3 +26,6 @@ rm -r ds4drv
 curl -o /etc/systemd/system/ds4drv.service https://raw.githubusercontent.com/nyukhalov/scout/master/systemd/ds4drv.service
 systemctl enable ds4drv.service
 systemctl start ds4drv.service
+
+# update hostname
+hostnamectl set-hostname scout-jetson
