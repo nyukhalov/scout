@@ -30,6 +30,12 @@ RUN cd ./src && \
     cd .. && \
     rm -rf ds4drv
 
+# install YDLidar ROS package
+RUN cd ./src && \
+    git clone -b X4 --depth 1 https://github.com/YDLIDAR/ydlidar_ros.git && \
+    cd ..
+
+# copy scout source code
 COPY ./scout /ros_ws/src/scout/
 
 # building all ROS packages

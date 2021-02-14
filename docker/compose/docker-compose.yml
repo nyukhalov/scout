@@ -1,0 +1,10 @@
+version: "3.3"
+services:
+  scout:
+    image: "banzzaj/scout-ros-av"
+    devices:
+      - "/dev/ydlidar:/dev/ydlidar"
+      - "/dev/input/js0:/dev/input/js0"
+    restart: always
+    network_mode: "host"
+
