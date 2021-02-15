@@ -12,6 +12,7 @@ docker-compose up -d scout
 ## Connecting to Jetson Nano's ROS from host
 
 ```
+export ROS_IP=<HOST IP>
 export ROS_MASTER_URI=http://scout-jetson:11311
 rostopic list
 ```
