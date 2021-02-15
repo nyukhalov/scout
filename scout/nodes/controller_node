@@ -6,7 +6,6 @@ from scout.ros.controller import RosController
 
 def main():
     rospy.init_node('scout_controller', anonymous=True)
-    #parameter = rospy.get_param("~param", "default_value")
     RosController().run()
 
 

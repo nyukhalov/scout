@@ -1,6 +1,7 @@
 import time
 import traceback
-from typing import List
+from typing import List, Optional
+import json
 
 import rospy
 from nav_msgs.msg import Path
@@ -9,15 +10,46 @@ from scout.lib.driver import maestro as m
 from scout.lib.driver.pwm_controller import  PwmController
 
 
+class ControllerConfig:
+    def __init__(self):
+        self.pwm_device = "/dev/ttyACM0"
+        # throttle
+        self.pwm_throttle_channel = 5
+        self.pwm_throttle_speed = 0
+        self.pwm_throttle_accel = 0
+        self.pwm_throttle_min_val = 5300
+        self.pwm_throttle_max_val = 6500
+        # steering
+        self.pwm_steering_channel = 0
+        self.pwm_steering_speed = 50
+        self.pwm_steering_accel = 0
+        self.pwm_steering_min_val = 5000
+        self.pwm_steering_max_val = 7000
+
+
 class RosController:
     def __init__(self):
-        self.servo = m.Controller('/dev/ttyACM0')
-        self.steering_ctrl = PwmController(self.servo, channel=0, speed=50, accel=0, min_val=5000, max_val=7000)
-        self.throttle_ctrl = PwmController(self.servo, channel=5, speed=0, accel=0, min_val=5500, max_val=6400)
+        config_file = rospy.get_param("~controller_config", None)
+        config = self._load_config(config_file)
+        rospy.loginfo(f"Using the configuration: {vars(config)}")
 
-        self._steering_target = 6000
-        self._throttle_target = 6000
-
+        self.servo = m.Controller(config.pwm_device)
+        self.steering_ctrl = PwmController(
+                self.servo,
+                channel=config.pwm_steering_channel,
+                speed=config.pwm_steering_speed,
+                accel=config.pwm_steering_accel,
+                min_val=config.pwm_steering_min_val,
+                max_val=config.pwm_steering_max_val
+        )
+        self.throttle_ctrl = PwmController(
+                self.servo,
+                channel=config.pwm_throttle_channel,
+                speed=config.pwm_throttle_speed,
+                accel=config.pwm_throttle_accel,
+                min_val=config.pwm_throttle_min_val,
+                max_val=config.pwm_throttle_max_val
+        )
         self._joy_sub = rospy.Subscriber(
             f"/j0/joy",
             Joy,
@@ -42,6 +74,26 @@ class RosController:
             traceback.print_exc()
         finally:
             self._destroy()
+
+    def _load_config(self, config_file: Optional[str]) -> ControllerConfig:
+        config = ControllerConfig()
+        if config_file:
+            with open(config_file, "r") as f:
+                config_json = json.load(f)
+                config.pwm_device = str(config_json["pwm"]["device"])
+                # throttle
+                config.pwm_throttle_channel = int(config_json["pwm"]["throttle"]["channel"])
+                config.pwm_throttle_speed = int(config_json["pwm"]["throttle"]["speed"])
+                config.pwm_throttle_accel = int(config_json["pwm"]["throttle"]["accel"])
+                config.pwm_throttle_min_val = int(config_json["pwm"]["throttle"]["min_val"])
+                config.pwm_throttle_max_val = int(config_json["pwm"]["throttle"]["max_val"])
+                # steering
+                config.pwm_steering_channel = int(config_json["pwm"]["steering"]["channel"])
+                config.pwm_steering_speed = int(config_json["pwm"]["steering"]["speed"])
+                config.pwm_steering_accel = int(config_json["pwm"]["steering"]["accel"])
+                config.pwm_steering_min_val = int(config_json["pwm"]["steering"]["min_val"])
+                config.pwm_steering_max_val = int(config_json["pwm"]["steering"]["max_val"])
+        return config
 
     def _destroy(self) -> None:
         self.steering_ctrl.set_target_by_factor(0)

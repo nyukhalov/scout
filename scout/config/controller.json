@@ -1,0 +1,19 @@
+{
+  "pwm": {
+    "device": "/dev/ttyACM0",
+    "throttle": {
+      "channel": 5,
+      "speed": 0,
+      "accel": 0,
+      "min_val": 5300,
+      "max_val": 6500
+    },
+    "steering": {
+      "channel": 0,
+      "speed": 50,
+      "accel": 0,
+      "min_val": 5000,
+      "max_val": 7000
+    }
+  }
+}
