@@ -25,3 +25,9 @@
 ```bash
 roslaunch scout mapping_bag.launch bag_filename:=/path/to/rosbag
 ```
+
+## Saving a map
+
+```bash
+<PATH_TO_SCOUT>/scripts/save-map.sh <PATH_TO_MAP>
+```

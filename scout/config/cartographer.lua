@@ -34,8 +34,14 @@ options = {
 MAP_BUILDER.use_trajectory_builder_2d = true
 
 -- Docs: https://github.com/cartographer-project/cartographer/blob/master/configuration_files/trajectory_builder_2d.lua
+TRAJECTORY_BUILDER_2D.min_range = 0.
+TRAJECTORY_BUILDER_2D.max_range = 10.
 TRAJECTORY_BUILDER_2D.num_accumulated_range_data = 1
+
+-- we don't use IMU
 TRAJECTORY_BUILDER_2D.use_imu_data = false
+
+-- enable and tune RealTimeCorrelativeScanMatcher which seems to work better with YDLidar
 TRAJECTORY_BUILDER_2D.use_online_correlative_scan_matching = true
 TRAJECTORY_BUILDER_2D.real_time_correlative_scan_matcher.linear_search_window = 0.15
 TRAJECTORY_BUILDER_2D.real_time_correlative_scan_matcher.angular_search_window = math.rad(35.)
