@@ -1,11 +1,8 @@
-<!-- -->
 <launch>
-  <arg name="role_name" default="ego_vehicle"/>
-  <arg name="sensor_definition_file" default="$(find scout)/config/sensors.json"/>
+  <arg name="controller_config" default="$(find scout)/config/controller.json"/>
 
-  <node pkg="scout" type="controller_node" name="scout_controller_$(arg role_name)" output="screen">
-    <param name="role_name" value="$(arg role_name)" />
-    <param name="sensor_definition_file" value="$(arg sensor_definition_file)" />
+  <node pkg="scout" type="controller_node" name="scout_controller" output="screen">
+    <param name="controller_config" value="$(arg controller_config)" />
   </node>
 
   <group ns="j0">

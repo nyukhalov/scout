@@ -1,17 +1,5 @@
-<!-- -->
 <launch>
-  <arg name="controller_config" default="$(find scout)/config/controller.json"/>
-
-  <node pkg="scout" type="controller_node" name="scout_controller" output="screen">
-    <param name="controller_config" value="$(arg controller_config)" />
-  </node>
-
-  <group ns="j0">
-    <node name="ds4_joystick" pkg="joy" type="joy_node">
-      <param name="dev" value="/dev/input/js0" />
-    </node>
-  </group>
-
+  <include file="$(find scout)/launch/joystick.launch" />
   <include file="$(find ydlidar)/launch/lidar.launch" />
 </launch>
 
