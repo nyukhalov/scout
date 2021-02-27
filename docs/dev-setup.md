@@ -24,18 +24,25 @@
 - Follow [the guide](https://github.com/IntelRealSense/librealsense/blob/development/doc/distribution_linux.md) to install realsense libraries: `librealsense2-dkms` and `librealsense2-utils`. The libraries are required for being able to connect and initialize the camera.
 - Create and initialize a catkin workspace. Install dependencies. `sudo rosdep init` will print an error if you have already executed it since installing ROS. This error can be ignored.
   ```bash
-  mkdir catkin_ws/src
-  cd catkin_ws/src
-  ln -s /path/to/scout
-  git clone -b X4 --depth 1 https://github.com/YDLIDAR/ydlidar_ros.git
+  mkdir catkin_ws
+  cd catkin_ws
+  wstool init src
+  wstool set ydlidar -y -t src --git https://github.com/YDLIDAR/ydlidar_ros.git -v X4
+  wstool merge -t src https://raw.githubusercontent.com/cartographer-project/cartographer_ros/master/cartographer_ros.rosinstall
+  wstool update -t src
+
+  ln -s <PATH_TO_SCOUT>/scout ./src/scout_ros
+
   sudo rosdep init
   rosdep update
   rosdep install --from-paths src --ignore-src --rosdistro=noetic -r -y
+
+  src/cartographer/scripts/install_abseil.sh
   ```
 - Build and install
   ```bash
   source /opt/ros/noetic/setup.zsh
-  catkin_make
+  catkin_make_isolated --install --use-ninja
   ```
 - Define the following environment variable
   ```bash
@@ -43,7 +50,7 @@
   ```
 - Source the development script
   ```bash
-  source /path/to/scout/scripts/devel.zsh
+  source <PATH_TO_SCOUT>/scripts/devel.zsh
   ```
 - Configure the lidar alias
   ```bash
@@ -51,3 +58,4 @@
   sudo chmod 777 ./*
   sudo sh initenv.sh
   ```
+
