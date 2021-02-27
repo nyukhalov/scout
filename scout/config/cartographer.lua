@@ -34,8 +34,11 @@ options = {
 MAP_BUILDER.use_trajectory_builder_2d = true
 
 -- Docs: https://github.com/cartographer-project/cartographer/blob/master/configuration_files/trajectory_builder_2d.lua
-TRAJECTORY_BUILDER_2D.min_range = 0.
-TRAJECTORY_BUILDER_2D.max_range = 10.
+TRAJECTORY_BUILDER_2D.min_range = 0.2
+TRAJECTORY_BUILDER_2D.max_range = 8.0
+TRAJECTORY_BUILDER_2D.missing_data_ray_length = 8.5
+
+-- One scan message contains one 360 scan
 TRAJECTORY_BUILDER_2D.num_accumulated_range_data = 1
 
 -- we don't use IMU
