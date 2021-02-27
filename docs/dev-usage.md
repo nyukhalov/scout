@@ -9,6 +9,17 @@
   roslaunch scout scout.launch
   ```
 
+## Running Cartographer online
+
+- Launch Cartographer and drive Scout around
+  ```bash
+  roslaunch scout mapping.launch
+  ```
+- When the map is ready run
+  ```bash
+  rosrun map_server map_saver -f filename
+  ```
+
 ## Running Cartographer on a rosbag
 
 ```bash

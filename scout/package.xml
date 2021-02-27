@@ -13,6 +13,7 @@
   <depend>joy</depend>
   <depend>ydlidar</depend>
   <depend>cartographer_ros</depend>
+  <depend>map_server</depend>
   <!-- <depend>realsense2_camera</depend> -->
   <!-- <depend>imu_filter_madgwick</depend> -->
   <!-- <depend>robot_localization</depend> -->

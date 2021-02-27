@@ -21,3 +21,7 @@ jstest-gtk
 ## Additional information
 
 - [Building a Docker image](./docs/docker-build.md)
+
+## Useful resources
+
+- [Building Maps Using Google Cartographer and the OS1 Lidar Sensor](https://ouster.com/blog/building-maps-using-google-cartographer-and-the-os1-lidar-sensor/)

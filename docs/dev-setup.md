@@ -12,7 +12,7 @@
   sudo apt install python-is-python3 python3-rosdep python3-wstool \
        ros-noetic-joy ros-noetic-realsense2-camera ros-noetic-realsense2-description \
        ros-noetic-imu-filter-madgwick ros-noetic-robot-localization \
-       ros-noetic-rtabmap-ros jstest-gtk
+       ros-noetic-rtabmap-ros ros-noetic-map-server jstest-gtk
   ```
 - Install ds4drv
   ```bash
