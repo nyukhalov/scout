@@ -25,14 +25,14 @@ class ControllerConfig:
         config = ControllerConfig()
         throttle_cfg_json = json["throttle"]
         steering_cfg_json = json["steering"]
-        config.pwm_device = str(json["device"])
+        config.device = str(json["device"])
         config.throttle = PwmConfig.from_json(throttle_cfg_json)
         config.steering = PwmConfig.from_json(steering_cfg_json)
         return config
 
     def __init__(self):
         # default values
-        self.pwm_device = "/dev/ttyACM0"
+        self.device = "/dev/ttyACM0"
         self.throttle = PwmConfig(channel=5, speed=0, accel=0, min_val=5300, max_val=6500)
         self.steering = PwmConfig(channel=0, speed=50, accel=0, min_val=5000, max_val=7000)
 

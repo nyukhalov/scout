@@ -29,7 +29,7 @@ class RosController:
         config = self._load_config(config_file)
         rospy.loginfo(f"Using the configuration: {vars(config)}")
 
-        self.servo = m.Controller(config.pwm_device)
+        self.servo = m.Controller(config.device)
         self.steering_ctrl = self.make_pwm_controller(self.servo, config.steering)
         self.throttle_ctrl = self.make_pwm_controller(self.servo, config.throttle)
 
