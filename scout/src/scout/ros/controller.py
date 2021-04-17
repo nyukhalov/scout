@@ -89,11 +89,11 @@ class RosController:
         btn_r1 = 5
 
         if msg.buttons[btn_l1]:
-            self._pwm_steering_offset -= 100
+            self._pwm_steering_offset -= 1
             rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
             self.steering_ctrl.set_offset(self._pwm_steering_offset)
         elif msg.buttons[btn_r1]:
-            self._pwm_steering_offset += 100
+            self._pwm_steering_offset += 1
             rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
             self.steering_ctrl.set_offset(self._pwm_steering_offset)
 

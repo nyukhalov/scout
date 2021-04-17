@@ -15,7 +15,7 @@
       "accel": 0,
       "min_val": 5000,
       "max_val": 7000,
-      "offset": 100
+      "offset": -100
     }
   }
 }
