@@ -6,14 +6,16 @@
       "speed": 0,
       "accel": 0,
       "min_val": 5300,
-      "max_val": 6500
+      "max_val": 6500,
+      "offset": 0
     },
     "steering": {
       "channel": 0,
       "speed": 50,
       "accel": 0,
       "min_val": 5000,
-      "max_val": 7000
+      "max_val": 7000,
+      "offset": 100
     }
   }
 }

@@ -9,14 +9,16 @@ class PwmConfig:
         accel = int(json["accel"])
         min_val = int(json["min_val"])
         max_val = int(json["max_val"])
-        return PwmConfig(channel, speed, accel, min_val, max_val)
+        offset = int(json["offset"])
+        return PwmConfig(channel, speed, accel, min_val, max_val, offset)
 
-    def __init__(self, channel: int, speed: int, accel: int, min_val: int, max_val: int):
+    def __init__(self, channel: int, speed: int, accel: int, min_val: int, max_val: int, offset: int):
         self.channel = channel
         self.speed = speed
         self.accel = accel
         self.min_val = min_val
         self.max_val = max_val
+        self.offset = offset
 
 
 class ControllerConfig:
@@ -33,6 +35,6 @@ class ControllerConfig:
     def __init__(self):
         # default values
         self.device = "/dev/ttyACM0"
-        self.throttle = PwmConfig(channel=5, speed=0, accel=0, min_val=5300, max_val=6500)
-        self.steering = PwmConfig(channel=0, speed=50, accel=0, min_val=5000, max_val=7000)
+        self.throttle = PwmConfig(channel=5, speed=0, accel=0, min_val=5300, max_val=6500, offset=0)
+        self.steering = PwmConfig(channel=0, speed=50, accel=0, min_val=5000, max_val=7000, offset=0)
 

@@ -15,7 +15,7 @@ class RosController:
 
     @staticmethod
     def make_pwm_controller(servo: m.Controller, config: PwmConfig) -> PwmController:
-        return PwmController(
+        controller = PwmController(
             servo,
             channel=config.channel,
             speed=config.speed,
@@ -23,6 +23,8 @@ class RosController:
             min_val=config.min_val,
             max_val=config.max_val
         )
+        controller.set_offset(config.offset)
+        return controller
 
     def __init__(self):
         config_file = rospy.get_param("~controller_config", None)
@@ -30,8 +32,8 @@ class RosController:
         rospy.loginfo(f"Using the configuration: {vars(config)}")
 
         self.servo = m.Controller(config.device)
-        self.steering_ctrl = self.make_pwm_controller(self.servo, config.steering)
         self.throttle_ctrl = self.make_pwm_controller(self.servo, config.throttle)
+        self.steering_ctrl = self.make_pwm_controller(self.servo, config.steering)
 
         self._joy_sub = rospy.Subscriber(
             f"/j0/joy",
