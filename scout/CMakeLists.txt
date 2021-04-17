@@ -34,3 +34,5 @@ install(DIRECTORY config/
 
 install(DIRECTORY urdf/
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/urdf)
+
+    #catkin_add_nosetests(test/ros/test_config.py)
