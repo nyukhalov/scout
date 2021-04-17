@@ -65,7 +65,7 @@ class RosController:
         if config_file:
             with open(config_file, "r") as f:
                 config_json = json.load(f)
-                config = ControllerConfig.from_json(config_json("pwm"))
+                config = ControllerConfig.from_json(config_json["pwm"])
         return config
 
     def _destroy(self) -> None:
