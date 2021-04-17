@@ -41,6 +41,7 @@ class RosController:
             self._on_joy_input
         )
 
+        self._pwm_steering_offset = config.steering.offset
         self._steering_joy_val = None
         self._throttle_joy_initialized = False
         self._throttle_joy_val = None
@@ -86,6 +87,15 @@ class RosController:
         btn_triangle = 3
         btn_l1 = 4
         btn_r1 = 5
+
+        if msg.buttons[btn_l1]:
+            self._pwm_steering_offset -= 100
+            rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
+            self.steering_ctrl.set_offset(self._pwm_steering_offset)
+        elif msg.buttons[btn_r1]:
+            self._pwm_steering_offset += 100
+            rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
+            self.steering_ctrl.set_offset(self._pwm_steering_offset)
 
         new_steering_val = msg.axes[ax_left_left_right]
         if self._steering_joy_val is None or new_steering_val != self._steering_joy_val:
