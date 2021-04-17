@@ -32,7 +32,6 @@ class PwmController:
         return max(min(val, self.PWM_MAX), self.PWM_MIN)
 
     def set_offset(self, offset: int) -> None:
-        assert self.PWM_MIN <= offset <= self.PWM_MAX, f"offset value {offset} is out of range"
         self._min_val = self._clip_pwm_value(self._original_min_val + offset)
         self._max_val = self._clip_pwm_value(self._original_max_val + offset)
         self._mid_val = self._clip_pwm_value(self.PWM_MID + offset)
