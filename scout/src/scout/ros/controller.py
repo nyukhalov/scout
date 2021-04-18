@@ -9,6 +9,7 @@ from sensor_msgs.msg import Joy
 from scout.lib.driver import maestro as m
 from scout.lib.driver.pwm_controller import PwmController
 from scout.ros.config import PwmConfig, ControllerConfig
+from scout.ros.joystick import DualShockInput
 
 
 class RosController:
@@ -42,11 +43,6 @@ class RosController:
         )
 
         self._pwm_steering_offset = config.steering.offset
-        self._steering_joy_val = None
-        self._throttle_joy_initialized = False
-        self._throttle_joy_val = None
-        self._reverse_joy_initialized = False
-        self._reverse_joy_val = None
 
     def run(self) -> None:
         rospy.loginfo(f"Starting controller")
@@ -74,56 +70,27 @@ class RosController:
         self.throttle_ctrl.set_target_by_factor(0)
 
     def _on_joy_input(self, msg: Joy) -> None:
-        ax_left_left_right = 0
-        ax_left_up_down = 1
-        ax_right_left_right = 2
-        ax_l2 = 3
-        ax_r2 = 4
-        ax_right_up_down = 5
+        joy_input = DualShockInput(msg)
 
-        btn_rect = 0
-        btn_x = 1
-        btn_circle = 2
-        btn_triangle = 3
-        btn_l1 = 4
-        btn_r1 = 5
-
-        if msg.buttons[btn_l1]:
+        if joy_input.is_steering_offset_dec():
             self._pwm_steering_offset -= 1
             rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
             self.steering_ctrl.set_offset(self._pwm_steering_offset)
-        elif msg.buttons[btn_r1]:
+        elif joy_input.is_steering_offset_inc():
             self._pwm_steering_offset += 1
             rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
             self.steering_ctrl.set_offset(self._pwm_steering_offset)
 
-        new_steering_val = msg.axes[ax_left_left_right]
-        if self._steering_joy_val is None or new_steering_val != self._steering_joy_val:
-            self._steering_joy_val = new_steering_val
-            assert -1.0 <= self._steering_joy_val <= 1.0
-            self.steering_ctrl.set_target_by_factor(-self._steering_joy_val)
-
-        new_throttle_val = msg.axes[ax_r2]
-        if self._throttle_joy_val is None or new_throttle_val != self._throttle_joy_val:
-            self._throttle_joy_val = new_throttle_val
-            if not self._throttle_joy_initialized and self._throttle_joy_val != 0:
-                self._throttle_joy_initialized = True
-
-            if self._throttle_joy_initialized:
-                assert -1.0 <= self._throttle_joy_val <= 1.0
-                factor = (1 - self._throttle_joy_val) / 2 # 0 .. 1
-                self.throttle_ctrl.set_target_by_factor(factor)
-
-        new_reverse_val = msg.axes[ax_l2]
-        if self._reverse_joy_val is None or new_reverse_val != self._reverse_joy_val:
-            self._reverse_joy_val = new_reverse_val
-            if not self._reverse_joy_initialized and self._reverse_joy_val != 0:
-                self._reverse_joy_initialized = True
-
-            if self._reverse_joy_initialized:
-                assert -1.0 <= self._reverse_joy_val <= 1.0
-                factor = (1 - self._reverse_joy_val) / 2 # 0 .. 1
-                self.throttle_ctrl.set_target_by_factor(-factor)
+        steering_val = joy_input.steering()
+        throttle_val = joy_input.throttle()
+        reverse_val = joy_input.braking()
+        assert -1.0 <= steering_val <= 1.0
+        assert 0.0 <= throttle_val <= 1.0
+        assert 0.0 <= reverse_val <= 1.0
+        self.steering_ctrl.set_target_by_factor(-steering_val)
+        self.throttle_ctrl.set_target_by_factor(throttle_val)
+        if reverse_val > 0:
+            self.throttle_ctrl.set_target_by_factor(-reverse_val)
 
     def _do_something(self) -> None:
         pass
