@@ -8,7 +8,7 @@ from nav_msgs.msg import Path
 from sensor_msgs.msg import Joy
 from scout.lib.driver import maestro as m
 from scout.lib.driver.pwm_controller import PwmController
-from scout.ros.config import PwmConfig, ControllerConfig
+from scout.ros.config import PwmConfig, ControllerConfig, JoystickConfig
 from scout.ros.joystick import DualShockInput
 
 
