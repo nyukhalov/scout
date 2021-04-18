@@ -36,6 +36,7 @@ class RosController:
         self.throttle_ctrl = self.make_pwm_controller(self.servo, config.throttle)
         self.steering_ctrl = self.make_pwm_controller(self.servo, config.steering)
 
+        self._joy_input = DualShockInput()
         self._joy_sub = rospy.Subscriber(
             f"/j0/joy",
             Joy,
@@ -70,20 +71,20 @@ class RosController:
         self.throttle_ctrl.set_target_by_factor(0)
 
     def _on_joy_input(self, msg: Joy) -> None:
-        joy_input = DualShockInput(msg)
+        self._joy_input.handle_message(msg)
 
-        if joy_input.is_steering_offset_dec():
+        if self._joy_input.is_steering_offset_dec():
             self._pwm_steering_offset -= 1
             rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
             self.steering_ctrl.set_offset(self._pwm_steering_offset)
-        elif joy_input.is_steering_offset_inc():
+        elif self._joy_input.is_steering_offset_inc():
             self._pwm_steering_offset += 1
             rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
             self.steering_ctrl.set_offset(self._pwm_steering_offset)
 
-        steering_val = joy_input.steering()
-        throttle_val = joy_input.throttle()
-        reverse_val = joy_input.braking()
+        steering_val = self._joy_input.steering()
+        throttle_val = self._joy_input.throttle()
+        reverse_val = self._joy_input.braking()
         assert -1.0 <= steering_val <= 1.0
         assert 0.0 <= throttle_val <= 1.0
         assert 0.0 <= reverse_val <= 1.0
