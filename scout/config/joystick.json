@@ -1,0 +1,35 @@
+{
+    "active_profile": "JetsonDualShock4",
+    "profiles": [
+        {
+            "name": "JetsonDualShock4",
+            "btn_x": 1,
+            "btn_o": 2,
+            "btn_triangle": 3,
+            "btn_rect": 0,
+            "btn_l1": 4,
+            "btn_r1": 5,
+            "ax_left_horizontal": 0,
+            "ax_left_vertical": 1,
+            "ax_right_horizontal": 2,
+            "ax_right_vertical": 5,
+            "ax_l2": 3,
+            "ax_r2": 4
+        },
+        {
+            "name": "DesktopDualShock4",
+            "btn_x": 0,
+            "btn_o": 1,
+            "btn_triangle": 2,
+            "btn_rect": 3,
+            "btn_l1": 4,
+            "btn_r1": 5,
+            "ax_left_horizontal": 0,
+            "ax_left_vertical": 1,
+            "ax_right_horizontal": 3,
+            "ax_right_vertical": 4,
+            "ax_l2": 2,
+            "ax_r2": 5
+        }
+    ]
+}

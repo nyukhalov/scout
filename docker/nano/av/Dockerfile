@@ -21,14 +21,9 @@ RUN cd ./src && \
         libbluetooth-dev \
         libcwiid-dev \
         libspnav-dev \
-        bluez && \
-    pip3 install wheel pyserial && \
-    git clone https://github.com/chrippa/ds4drv.git && \
-    cd ds4drv && \
-    python3 setup.py sdist && \
-    pip3 install dist/*.tar.gz --system && \
-    cd .. && \
-    rm -rf ds4drv
+        bluez \
+        vim && \
+    pip3 install wheel pyserial
 
 # install YDLidar ROS package
 RUN cd ./src && \
@@ -41,9 +36,6 @@ COPY ./scout /ros_ws/src/scout/
 # building all ROS packages
 RUN . /opt/ros/noetic/setup.sh && \
     catkin_make
-
-# other tools
-RUN apt install -y vim
 
 # cleanup
 RUN rm -rf /var/lib/apt/lists/*

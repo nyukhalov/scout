@@ -16,8 +16,12 @@ class PwmController:
 
         self.ctrl = ctrl
         self.channel = channel
-        self.min_val = min_val
-        self.max_val = max_val
+        self._original_min_val = min_val
+        self._original_max_val = max_val
+        self._min_val = min_val
+        self._max_val = max_val
+        self._mid_val = self.PWM_MID
+        self._offset = 0
 
         # Speed is measured as 0.25microseconds/10milliseconds
         self.ctrl.setSpeed(channel, speed)
@@ -25,13 +29,26 @@ class PwmController:
         # A value of 1 will take the servo about 3s to move between 1ms to 2ms range
         self.ctrl.setAccel(channel, accel)
 
+    def _clip_pwm_value(self, val: int) -> int:
+        return max(min(val, self.PWM_MAX), self.PWM_MIN)
+
+    def get_offset(self) -> int:
+        return self._offset
+
+    def set_offset(self, offset: int) -> None:
+        self._offset = offset
+        self._min_val = self._clip_pwm_value(self._original_min_val + offset)
+        self._max_val = self._clip_pwm_value(self._original_max_val + offset)
+        self._mid_val = self._clip_pwm_value(self.PWM_MID + offset)
+
     def set_target_by_factor(self, factor: float) -> None:
         assert -1.0 <= factor <= 1.0, f"factor value {factor} is out of range"
-        max_offset = (self.max_val - self.PWM_MID) if factor >= 0 else (self.PWM_MID - self.min_val)
-        target = self.PWM_MID + int(factor * max_offset)
+        max_offset = (self._max_val - self._mid_val) if factor >= 0 else (self._mid_val - self._min_val)
+        target = self._mid_val + int(factor * max_offset)
         self.set_target(target)
 
     def set_target(self, target: int) -> None:
+        """Set PWM target ignoring the offset value"""
         assert self.PWM_MIN <= target <= self.PWM_MAX, f"target value {target} is out of range"
         # For servos, target represents the pulse width in of quarter-microseconds
         # Servo center is at 1500 microseconds, or 6000 quarter-microseconds

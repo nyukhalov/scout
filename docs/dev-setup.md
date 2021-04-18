@@ -14,13 +14,6 @@
        ros-noetic-imu-filter-madgwick ros-noetic-robot-localization \
        ros-noetic-rtabmap-ros ros-noetic-map-server jstest-gtk
   ```
-- Install ds4drv
-  ```bash
-  git clone https://github.com/chrippa/ds4drv.git
-  cd ds4drv
-  python3 setup.py sdist
-  sudo pip3 install dist/ds4drv-0.5.1.tar.gz --system --upgrade
-  ```
 - Follow [the guide](https://github.com/IntelRealSense/librealsense/blob/development/doc/distribution_linux.md) to install realsense libraries: `librealsense2-dkms` and `librealsense2-utils`. The libraries are required for being able to connect and initialize the camera.
 - Create and initialize a catkin workspace. Install dependencies. `sudo rosdep init` will print an error if you have already executed it since installing ROS. This error can be ignored.
   ```bash
