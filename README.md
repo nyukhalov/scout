@@ -12,10 +12,8 @@ Self-Driving RC Car
 
 ## Debugging DualShock4
 
-Make sure `ds4drv` is running, then run
-
 ```bash
-jstest-gtk
+sudo jstest /dev/input/js0
 ```
 
 ## Additional information
