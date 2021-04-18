@@ -28,22 +28,20 @@ class RosController:
         return controller
 
     def __init__(self):
-        config_file = rospy.get_param("~controller_config", None)
-        config = self._load_config(config_file)
-        rospy.loginfo(f"Using the configuration: {vars(config)}")
+        controller_config_file = rospy.get_param("~controller_config", None)
+        controller_config = self._load_controller_config(controller_config_file)
+        rospy.loginfo(f"Controller configuration: {vars(controller_config)}")
 
-        self.servo = m.Controller(config.device)
-        self.throttle_ctrl = self.make_pwm_controller(self.servo, config.throttle)
-        self.steering_ctrl = self.make_pwm_controller(self.servo, config.steering)
+        joystick_config_file = rospy.get_param("~joystick_config", None)
+        joystick_config = self._load_joystick_config(joystick_config_file)
+        rospy.loginfo(f"Joystick configuration: {vars(joystick_config)}")
 
-        self._joy_input = DualShockInput()
-        self._joy_sub = rospy.Subscriber(
-            f"/j0/joy",
-            Joy,
-            self._on_joy_input
-        )
+        self.servo = m.Controller(controller_config.device)
+        self.throttle_ctrl = self.make_pwm_controller(self.servo, controller_config.throttle)
+        self.steering_ctrl = self.make_pwm_controller(self.servo, controller_config.steering)
 
-        self._pwm_steering_offset = config.steering.offset
+        self._joy_input = DualShockInput(joystick_config.active_profile)
+        self._joy_sub = rospy.Subscriber("/j0/joy", Joy, self._on_joy_input)
 
     def run(self) -> None:
         rospy.loginfo(f"Starting controller")
@@ -58,13 +56,18 @@ class RosController:
         finally:
             self._destroy()
 
-    def _load_config(self, config_file: Optional[str]) -> ControllerConfig:
+    def _load_controller_config(self, config_file: Optional[str]) -> ControllerConfig:
         config = ControllerConfig()
         if config_file:
             with open(config_file, "r") as f:
                 config_json = json.load(f)
                 config = ControllerConfig.from_json(config_json["pwm"])
         return config
+
+    def _load_joystick_config(self, config_file: str) -> JoystickConfig:
+        with open(config_file, "r") as f:
+            config_json = json.load(f)
+            return JoystickConfig.from_json(config_json)
 
     def _destroy(self) -> None:
         self.steering_ctrl.set_target_by_factor(0)
@@ -73,21 +76,18 @@ class RosController:
     def _on_joy_input(self, msg: Joy) -> None:
         self._joy_input.handle_message(msg)
 
+        new_offset = None
         if self._joy_input.is_steering_offset_dec():
-            self._pwm_steering_offset -= 1
-            rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
-            self.steering_ctrl.set_offset(self._pwm_steering_offset)
+            new_offset = self.steering_ctrl.get_offset() - 1
         elif self._joy_input.is_steering_offset_inc():
-            self._pwm_steering_offset += 1
-            rospy.loginfo(f"Setting new PWM steering offset: {self._pwm_steering_offset}")
-            self.steering_ctrl.set_offset(self._pwm_steering_offset)
+            new_offset = self.steering_ctrl.get_offset() + 1
+        if new_offset is not None:
+            rospy.loginfo(f"Setting new PWM steering offset: {new_offset}")
+            self.steering_ctrl.set_offset(new_offset)
 
         steering_val = self._joy_input.steering()
         throttle_val = self._joy_input.throttle()
         reverse_val = self._joy_input.braking()
-        assert -1.0 <= steering_val <= 1.0
-        assert 0.0 <= throttle_val <= 1.0
-        assert 0.0 <= reverse_val <= 1.0
         self.steering_ctrl.set_target_by_factor(-steering_val)
         self.throttle_ctrl.set_target_by_factor(throttle_val)
         if reverse_val > 0:

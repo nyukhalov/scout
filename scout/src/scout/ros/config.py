@@ -1,4 +1,5 @@
 from typing import Dict
+from scout.ros.joystick import JoystickProfile
 
 
 class PwmConfig:
@@ -37,4 +38,18 @@ class ControllerConfig:
         self.device = "/dev/ttyACM0"
         self.throttle = PwmConfig(channel=5, speed=0, accel=0, min_val=5300, max_val=6500, offset=0)
         self.steering = PwmConfig(channel=0, speed=50, accel=0, min_val=5000, max_val=7000, offset=0)
+
+
+class JoystickConfig:
+    @staticmethod
+    def from_json(json: Dict) -> "JoystickConfig":
+        active_profile_name = json["active_profile"]
+        for profile_json in json["profiles"]:
+            if profile_json["name"] == active_profile_name:
+                active_profile = JoystickProfile.from_json(profile_json)
+                return JoystickConfig(active_profile)
+        raise Exception(f"Unable to load active profile: {active_profile_name}")
+
+    def __init__(self, active_profile: JoystickProfile):
+        self.active_profile = active_profile
 

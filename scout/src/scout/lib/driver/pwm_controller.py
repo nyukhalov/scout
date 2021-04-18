@@ -21,6 +21,7 @@ class PwmController:
         self._min_val = min_val
         self._max_val = max_val
         self._mid_val = self.PWM_MID
+        self._offset = 0
 
         # Speed is measured as 0.25microseconds/10milliseconds
         self.ctrl.setSpeed(channel, speed)
@@ -31,7 +32,11 @@ class PwmController:
     def _clip_pwm_value(self, val: int) -> int:
         return max(min(val, self.PWM_MAX), self.PWM_MIN)
 
+    def get_offset(self) -> int:
+        return self._offset
+
     def set_offset(self, offset: int) -> None:
+        self._offset = offset
         self._min_val = self._clip_pwm_value(self._original_min_val + offset)
         self._max_val = self._clip_pwm_value(self._original_max_val + offset)
         self._mid_val = self._clip_pwm_value(self.PWM_MID + offset)
