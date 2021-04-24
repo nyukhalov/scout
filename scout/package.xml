@@ -2,7 +2,7 @@
 <package format="2">
   <name>scout</name>
   <version>0.0.0</version>
-  <description>The scout package</description>
+  <description>Self-Driving RC Car</description>
   <maintainer email="r.nyukhalov@gmail.com">Roman Niukhalov</maintainer>
   <license>MIT</license>
 
@@ -35,7 +35,6 @@
   <depend>python3-numpy</depend>
   <depend>python3-yaml</depend>
   <depend>python3-serial</depend>
-  <exec_depend>ds4drv-pip</exec_depend>
   <!-- <depend>python3-shapely</depend> -->
   <!-- <depend>python3-networkx</depend> -->
 
