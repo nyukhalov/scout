@@ -21,6 +21,12 @@ class PwmConfig:
         self.max_val = max_val
         self.offset = offset
 
+    def __str__(self) -> str:
+        return str(vars(self))
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
 
 class ControllerConfig:
     @staticmethod
@@ -39,6 +45,12 @@ class ControllerConfig:
         self.throttle = PwmConfig(channel=5, speed=0, accel=0, min_val=5300, max_val=6500, offset=0)
         self.steering = PwmConfig(channel=0, speed=50, accel=0, min_val=5000, max_val=7000, offset=0)
 
+    def __str__(self) -> str:
+        return str(vars(self))
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
 
 class JoystickConfig:
     @staticmethod
@@ -52,4 +64,10 @@ class JoystickConfig:
 
     def __init__(self, active_profile: JoystickProfile):
         self.active_profile = active_profile
+
+    def __str__(self) -> str:
+        return str(vars(self))
+
+    def __repr__(self) -> str:
+        return self.__str__()
 

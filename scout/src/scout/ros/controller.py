@@ -28,13 +28,16 @@ class RosController:
         return controller
 
     def __init__(self):
+        rospy.init_node("scout_controller", anonymous=False, log_level=rospy.INFO)
+        rospy.loginfo("Initializing node")
+
         controller_config_file = rospy.get_param("~controller_config", None)
         controller_config = self._load_controller_config(controller_config_file)
-        rospy.loginfo(f"Controller configuration: {vars(controller_config)}")
+        rospy.loginfo(f"Controller configuration: {controller_config}")
 
         joystick_config_file = rospy.get_param("~joystick_config", None)
         joystick_config = self._load_joystick_config(joystick_config_file)
-        rospy.loginfo(f"Joystick configuration: {vars(joystick_config)}")
+        rospy.loginfo(f"Joystick configuration: {joystick_config}")
 
         self.servo = m.Controller(controller_config.device)
         self.throttle_ctrl = self.make_pwm_controller(self.servo, controller_config.throttle)
@@ -44,7 +47,7 @@ class RosController:
         self._joy_sub = rospy.Subscriber("/j0/joy", Joy, self._on_joy_input)
 
     def run(self) -> None:
-        rospy.loginfo(f"Starting controller")
+        rospy.loginfo("Starting controller")
         try:
             rate = rospy.Rate(1)  # ROS Rate at 1Hz
             while not rospy.is_shutdown():

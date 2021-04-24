@@ -77,6 +77,12 @@ class JoystickProfile:
         self.ax_l2 = ax_l2
         self.ax_r2 = ax_r2
 
+    def __str__(self) -> str:
+        return str(vars(self))
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
 
 class DualShockInput(JoystickInput):
     def __init__(self, profile: JoystickProfile):
