@@ -1,5 +1,6 @@
 <launch>
-  <include file="$(find scout)/launch/joystick.launch" />
-  <include file="$(find ydlidar)/launch/lidar.launch" />
+    <include file="$(find scout)/launch/joystick.launch" />
+    <include file="$(find ydlidar)/launch/lidar.launch" />
+    <include file="$(find scout)/launch/state_publisher.launch" />
 </launch>
 

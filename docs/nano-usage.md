@@ -2,7 +2,7 @@
 
 ## Running Scout
 
-The easiest way to run Scout is by running the `scout-ros-av` Docker image:
+The easiest way to run Scout is by running the `banzzaj/scout-ros-av` Docker image:
 
 ```bash
 ssh roman@scout-jetson
