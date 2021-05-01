@@ -9,6 +9,7 @@ Self-Driving RC Car
 ## Usage
 - [Usage for development](./docs/dev-usage.md)
 - [Usage on Jetson Nano](./docs/nano-usage.md)
+- [Mapping](./docs/mapping.md)
 
 ## Debugging DualShock4
 

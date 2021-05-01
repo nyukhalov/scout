@@ -1,5 +1,14 @@
 # Running Scout on Jetson Nano
 
+## Set up
+
+A DualShock joystick is used for teleoperation.
+The joystick can be connected by running:
+
+```bash
+bluetoothctl connect <MAC_ADDR>
+```
+
 ## Running Scout
 
 The easiest way to run Scout is by running the `banzzaj/scout-ros-av` Docker image:
@@ -9,10 +18,3 @@ ssh roman@scout-jetson
 docker-compose up -d scout
 ```
 
-## Connecting to Jetson Nano's ROS from host
-
-```
-export ROS_IP=<HOST IP>
-export ROS_MASTER_URI=http://scout-jetson:11311
-rostopic list
-```
