@@ -5,11 +5,9 @@ import json
 
 import rospy
 from nav_msgs.msg import Path
-from sensor_msgs.msg import Joy
 from scout.lib.driver import maestro as m
 from scout.lib.driver.pwm_controller import PwmController
-from scout.ros.config import PwmConfig, ControllerConfig, JoystickConfig
-from scout.ros.joystick import DualShockInput
+from scout.ros.config import PwmConfig, ControllerConfig
 
 
 class RosController:
@@ -35,16 +33,9 @@ class RosController:
         controller_config = self._load_controller_config(controller_config_file)
         rospy.loginfo(f"Controller configuration: {controller_config}")
 
-        joystick_config_file = rospy.get_param("~joystick_config", None)
-        joystick_config = self._load_joystick_config(joystick_config_file)
-        rospy.loginfo(f"Joystick configuration: {joystick_config}")
-
         self.servo = m.Controller(controller_config.device)
         self.throttle_ctrl = self.make_pwm_controller(self.servo, controller_config.throttle)
         self.steering_ctrl = self.make_pwm_controller(self.servo, controller_config.steering)
-
-        self._joy_input = DualShockInput(joystick_config.active_profile)
-        self._joy_sub = rospy.Subscriber("/j0/joy", Joy, self._on_joy_input)
 
     def run(self) -> None:
         rospy.loginfo("Starting controller")
@@ -66,11 +57,6 @@ class RosController:
                 config_json = json.load(f)
                 config = ControllerConfig.from_json(config_json["pwm"])
         return config
-
-    def _load_joystick_config(self, config_file: str) -> JoystickConfig:
-        with open(config_file, "r") as f:
-            config_json = json.load(f)
-            return JoystickConfig.from_json(config_json)
 
     def _destroy(self) -> None:
         self.steering_ctrl.set_target_by_factor(0)

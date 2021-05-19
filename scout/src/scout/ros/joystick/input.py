@@ -88,20 +88,25 @@ class DualShockInput(JoystickInput):
     def __init__(self, profile: JoystickProfile):
         self._profile = profile
         self._msg = None
+        self._prev_buttons = None
         self._l2_initialized = False
         self._r2_initialized = False
 
     def handle_message(self, msg: Joy) -> None:
+        if self._msg:
+            self._prev_buttons = self._msg.buttons
         self._msg = msg
 
     def is_steering_offset_dec(self) -> bool:
-        return self._btn_pressed(self._profile.btn_l1)
+        btn = self._profile.btn_l1
+        return self._btn_updated(btn) and self._btn_pressed(btn)
 
     def is_steering_offset_inc(self) -> bool:
-        return self._btn_pressed(self._profile.btn_r1)
+        btn = self._profile.btn_r1
+        return self._btn_updated(btn) and self._btn_pressed(btn)
 
     def steering(self) -> float:
-        return self._ax_value(self._profile.ax_left_horizontal)
+        return -self._ax_value(self._profile.ax_left_horizontal)
 
     def throttle(self) -> float:
         val = self._ax_value(self._profile.ax_r2)
@@ -125,6 +130,11 @@ class DualShockInput(JoystickInput):
         if self._msg is None:
             raise Exception("Input has not been initialized")
         return self._msg.buttons[btn] > 0
+
+    def _btn_updated(self, btn: int) -> bool:
+        if not self._prev_buttons:
+            return True
+        return self._prev_buttons[btn] != self._msg.buttons[btn]
 
     def _ax_value(self, ax: int) -> float:
         if self._msg is None:
