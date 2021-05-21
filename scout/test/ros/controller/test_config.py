@@ -1,5 +1,5 @@
 import json
-from scout.ros.config import PwmConfig, ControllerConfig
+from scout.ros.controller.config import PwmConfig, ControllerConfig
 import unittest
 
 
