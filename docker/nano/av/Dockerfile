@@ -3,7 +3,7 @@ FROM banzzaj/scout-ros-base:latest
 RUN mkdir -p /ros_ws/src
 WORKDIR /ros_ws
 
-RUN apt update
+RUN apt-get update
 
 # downloading scout's dependencies and its dependencies.
 # the libraries do not exist in the repository for the aarch64 platform,
