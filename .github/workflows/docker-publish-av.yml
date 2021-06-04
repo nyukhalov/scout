@@ -25,18 +25,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-
-      - name: Build and push
+      - name: Build and push docker image (PR)
+        if: github.ref != 'refs/heads/master'
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           file: ./docker/nano/av/Dockerfile
           push: true
-          tags: banzzaj/scout-ros-av:${{ steps.extract_branch.outputs.branch }},banzzaj/scout-ros-av:latest
+          tags: banzzaj/scout-ros-av:PR-${{ github.event.pull_request.number }}
+
+      - name: Build and push docker image (master)
+        if: github.ref == 'refs/heads/master'
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          file: ./docker/nano/av/Dockerfile
+          push: true
+          tags: banzzaj/scout-ros-av:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
