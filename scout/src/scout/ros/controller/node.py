@@ -7,7 +7,7 @@ import rospy
 from nav_msgs.msg import Path
 from scout.lib.driver import maestro as m
 from scout.lib.driver.pwm_controller import PwmController
-from scout.ros.config import PwmConfig, ControllerConfig
+from scout.ros.controller.config import PwmConfig, ControllerConfig
 from scout.msg import CarControlStamped
 
 
