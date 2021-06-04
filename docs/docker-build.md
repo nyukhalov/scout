@@ -20,11 +20,9 @@
 
 ```bash
 # building and publishing the base image
-podman build -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static -t banzzaj/scout-ros-base -f ./docker/nano/base/Dockerfile .
-podman push banzzaj/scout-ros-base:latest
+./scripts/docker-build-base.sh
 
 # building and publishing the av image
-podman build -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static -t banzzaj/scout-ros-av -f ./docker/nano/av/Dockerfile .
-podman push banzzaj/scout-ros-av
+./scripts/docker-build-av.sh
 ```
 
