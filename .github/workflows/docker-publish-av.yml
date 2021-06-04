@@ -36,9 +36,7 @@ jobs:
         with:
           file: ./docker/nano/av/Dockerfile
           push: true
-          tags:
-            - banzzaj/scout-ros-av:${{ steps.extract_branch.outputs.branch }}
-            - banzzaj/scout-ros-av:latest
+          tags: banzzaj/scout-ros-av:${{ steps.extract_branch.outputs.branch }},banzzaj/scout-ros-av:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
