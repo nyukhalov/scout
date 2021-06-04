@@ -1,12 +1,12 @@
 from typing import List
-from scout.ros.joystick import DualShockInput, JoystickProfile
+from scout.ros.joystick.input import DualShockInput, JoystickProfile
 from sensor_msgs.msg import Joy
 import json
 import os
 import unittest
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-config_path = os.path.join(dir_path, "..", "..", "config")
+config_path = os.path.join(dir_path, "..", "..", "..", "config")
 
 class TestDualShockInput(unittest.TestCase):
     def __init__(self, *args, **kwargs):

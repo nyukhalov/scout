@@ -5,14 +5,13 @@ import json
 
 import rospy
 from nav_msgs.msg import Path
-from sensor_msgs.msg import Joy
 from scout.lib.driver import maestro as m
 from scout.lib.driver.pwm_controller import PwmController
-from scout.ros.config import PwmConfig, ControllerConfig, JoystickConfig
-from scout.ros.joystick import DualShockInput
+from scout.ros.controller.config import PwmConfig, ControllerConfig
+from scout.msg import CarControlStamped
 
 
-class RosController:
+class RosControllerNode:
 
     @staticmethod
     def make_pwm_controller(servo: m.Controller, config: PwmConfig) -> PwmController:
@@ -31,32 +30,27 @@ class RosController:
         rospy.init_node("scout_controller", anonymous=False, log_level=rospy.INFO)
         rospy.loginfo("Initializing node")
 
+
+        ctrl_topic = rospy.get_param("~car_control_topic", "/car/control")
         controller_config_file = rospy.get_param("~controller_config", None)
         controller_config = self._load_controller_config(controller_config_file)
         rospy.loginfo(f"Controller configuration: {controller_config}")
 
-        joystick_config_file = rospy.get_param("~joystick_config", None)
-        joystick_config = self._load_joystick_config(joystick_config_file)
-        rospy.loginfo(f"Joystick configuration: {joystick_config}")
+        self._ctrl_sub = rospy.Subscriber(ctrl_topic, CarControlStamped, self._on_ctrl_msg)
 
         self.servo = m.Controller(controller_config.device)
         self.throttle_ctrl = self.make_pwm_controller(self.servo, controller_config.throttle)
         self.steering_ctrl = self.make_pwm_controller(self.servo, controller_config.steering)
 
-        self._joy_input = DualShockInput(joystick_config.active_profile)
-        self._joy_sub = rospy.Subscriber("/j0/joy", Joy, self._on_joy_input)
-
     def run(self) -> None:
-        rospy.loginfo("Starting controller")
+        rospy.loginfo("Starting node...")
         try:
-            rate = rospy.Rate(1)  # ROS Rate at 1Hz
-            while not rospy.is_shutdown():
-                self._do_something()
-                rate.sleep()
+            rospy.spin()
         except Exception as e:
-            rospy.logerror('The node has been interrupted by exception', e)
+            rospy.logerror("The node has been interrupted by exception", e)
             traceback.print_exc()
         finally:
+            rospy.loginfo("Shutting down...")
             self._destroy()
 
     def _load_controller_config(self, config_file: Optional[str]) -> ControllerConfig:
@@ -67,35 +61,24 @@ class RosController:
                 config = ControllerConfig.from_json(config_json["pwm"])
         return config
 
-    def _load_joystick_config(self, config_file: str) -> JoystickConfig:
-        with open(config_file, "r") as f:
-            config_json = json.load(f)
-            return JoystickConfig.from_json(config_json)
-
     def _destroy(self) -> None:
         self.steering_ctrl.set_target_by_factor(0)
         self.throttle_ctrl.set_target_by_factor(0)
 
-    def _on_joy_input(self, msg: Joy) -> None:
-        self._joy_input.handle_message(msg)
+    def _on_ctrl_msg(self, msg: CarControlStamped) -> None:
+        throttle = msg.control.actuators.gas
+        brake = msg.control.actuators.brake
+        steer = msg.control.actuators.steer
+        steer_offset_inc = msg.control.calibration.steer_offset_inc
 
-        new_offset = None
-        if self._joy_input.is_steering_offset_dec():
-            new_offset = self.steering_ctrl.get_offset() - 1
-        elif self._joy_input.is_steering_offset_inc():
-            new_offset = self.steering_ctrl.get_offset() + 1
-        if new_offset is not None:
+        if steer_offset_inc != 0:
             rospy.loginfo(f"Setting new PWM steering offset: {new_offset}")
+            new_offset = self.steering_ctrl.get_offset() + steer_offset_inc
             self.steering_ctrl.set_offset(new_offset)
 
-        steering_val = self._joy_input.steering()
-        throttle_val = self._joy_input.throttle()
-        reverse_val = self._joy_input.braking()
-        self.steering_ctrl.set_target_by_factor(-steering_val)
-        self.throttle_ctrl.set_target_by_factor(throttle_val)
-        if reverse_val > 0:
-            self.throttle_ctrl.set_target_by_factor(-reverse_val)
-
-    def _do_something(self) -> None:
-        pass
+        self.steering_ctrl.set_target_by_factor(steer)
+        if brake > 0:
+            self.throttle_ctrl.set_target_by_factor(-brake)
+        else:
+            self.throttle_ctrl.set_target_by_factor(throttle)
 

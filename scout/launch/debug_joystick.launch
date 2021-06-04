@@ -1,0 +1,13 @@
+<launch>
+  <arg name="joystick_config" default="$(find scout)/config/joystick.json"/>
+
+  <node pkg="scout" type="joystick_node" name="scout_joystick" output="screen">
+    <param name="joystick_config" value="$(arg joystick_config)" />
+    <param name="joystick_profile" value="DesktopDualShock4" />
+  </node>
+
+  <node pkg="joy" type="joy_node" name="ds4_joystick">
+    <param name="dev" value="/dev/input/js0" />
+  </node>
+</launch>
+

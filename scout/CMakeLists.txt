@@ -13,7 +13,10 @@ catkin_python_setup()
 
 # Message generation
 add_message_files(FILES
-  CustomMessage.msg
+    Actuators.msg
+    Calibration.msg
+    CarControl.msg
+    CarControlStamped.msg
 )
 generate_messages(DEPENDENCIES std_msgs)
 
@@ -24,6 +27,7 @@ catkin_package(CATKIN_DEPENDS rospy)
 # Install executables
 catkin_install_python(PROGRAMS
                         nodes/controller_node
+                        nodes/joystick_node
                       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(DIRECTORY launch/
