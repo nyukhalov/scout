@@ -1,4 +1,5 @@
 import rospy
+import math
 from sensor_msgs.msg import LaserScan
 
 
@@ -21,17 +22,24 @@ class RosWallFollowerNode:
             rospy.loginfo("Shutting down...")
 
     def _on_scan_msg(self, msg: LaserScan) -> None:
-        # TODO: normalize all angles to [-PI, PI]
         num_rays = len(msg.ranges)
         assert num_rays == int((msg.angle_max - msg.angle_min) / msg.angle_increment)
+        if num_rays == 0:
+            rospy.logwarn(f"num_rays must be positive, but got {num_rays}")
+            return
 
-        target_baselink_angle = -3.14 / 2  # -90 degrees
-        target_angle = ???
-        idx = (target_angle - msg.angle_min) / msg.angle_increment
+        z_rot = math.pi  # TODO: get from TF
+        target_angle = 1.5 * math.pi # 270 (-90) degrees in the base_link frame
+        amin = msg.angle_min + z_rot
+        amax = msg.angle_max + z_rot
+        assert amin <= target_angle <= amax
+
+        idx = int((target_angle - amin) // msg.angle_increment)
         target_range = msg.ranges[idx]
 
-        for i, r in enumerate(msg.ranges):
-            if msg.range_min <= r <= msg.range_max:
-                # do something
-                pass
+        if msg.range_min <= target_range <= msg.range_max:
+            # TODO: do someting
+            rospy.loginfo(f"Range={target_range}")
+        else:
+            rospy.logwarn(f"Range {target_range} is not within allowed range [{msg.range_min}, {msg.range_max}]")
 
