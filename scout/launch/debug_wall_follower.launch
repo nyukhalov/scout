@@ -1,0 +1,9 @@
+<launch>
+
+  <node pkg="scout" type="wall_follower_node" name="scout_wall_follower" output="screen">
+    <param name="scan_topic" value="/scan" />
+    <param name="car_control_topic" value="/car/control/auto" />
+  </node>
+
+</launch>
+

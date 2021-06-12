@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+from scout.ros.auto.node import RosWallFollowerNode
+
+
+if __name__ == '__main__':
+    RosWallFollowerNode().run()

@@ -9,6 +9,7 @@ d = generate_distutils_setup(
         'scout.lib',
         'scout.lib.driver',
         'scout.ros',
+        'scout.ros.auto',
         'scout.ros.controller',
         'scout.ros.joystick',
     ],
