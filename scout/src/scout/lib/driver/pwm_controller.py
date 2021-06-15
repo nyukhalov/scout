@@ -57,7 +57,7 @@ class PwmController:
 
         msg2 = Int32()
         msg2.data = int(max_offset)
-        self._pub3.publish(msg)
+        self._pub3.publish(msg2)
 
         target = self._mid_val + int(factor * max_offset)
         self.set_target(target)
