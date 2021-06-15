@@ -5,4 +5,4 @@ set -e
 source "/opt/ros/noetic/setup.bash"
 source "/ros_ws/devel/setup.bash"
 
-roslaunch scout scout.launch
+roslaunch scout "${LAUNCH_FILE:-scout.launch}"
