@@ -42,6 +42,8 @@ class RosControllerNode:
         self.throttle_ctrl = self.make_pwm_controller(self.servo, controller_config.throttle)
         self.steering_ctrl = self.make_pwm_controller(self.servo, controller_config.steering)
 
+        self._pub = rospy.Publisher("/debug/steer", Float32, queue_size=1)
+
     def run(self) -> None:
         rospy.loginfo("Starting node...")
         try:
@@ -62,7 +64,7 @@ class RosControllerNode:
         return config
 
     def _destroy(self) -> None:
-        self.steering_ctrl.set_target_by_factor(0)
+        #self.steering_ctrl.set_target_by_factor(0)
         self.throttle_ctrl.set_target_by_factor(0)
 
     def _on_ctrl_msg(self, msg: CarControlStamped) -> None:
@@ -70,6 +72,10 @@ class RosControllerNode:
         brake = msg.control.actuators.brake
         steer = msg.control.actuators.steer
         steer_offset_inc = msg.control.calibration.steer_offset_inc
+
+        debug_msg = Float32()
+        debug_msg.data = steer
+        self._pub.publish(debug_msg)
 
         if steer_offset_inc != 0:
             rospy.loginfo(f"Setting new PWM steering offset: {new_offset}")
