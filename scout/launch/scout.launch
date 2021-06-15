@@ -1,13 +1,13 @@
 <launch>
 
-    <arg name="car_control_topic" default="/car/control"/>
+    <arg name="ctrl_topic" default="/car/control"/>
 
     <include file="$(find scout)/launch/joystick.launch">
-        <arg name="car_control_topic" value="$(arg car_control_topic)"/>
+        <arg name="ctrl_topic" value="$(arg ctrl_topic)"/>
     </include>
 
     <include file="$(find scout)/launch/controller.launch">
-        <arg name="car_control_topic value="$(arg car_control_topic)"/>
+        <arg name="ctrl_topic" value="$(arg ctrl_topic)"/>
     </include>
 
     <include file="$(find ydlidar)/launch/lidar.launch" />
