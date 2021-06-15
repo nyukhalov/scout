@@ -27,7 +27,9 @@ catkin_package(CATKIN_DEPENDS rospy)
 # Install executables
 catkin_install_python(PROGRAMS
                         nodes/controller_node
+                        nodes/ctrl_multiplexer_node
                         nodes/joystick_node
+                        nodes/wall_follower_node
                       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(DIRECTORY launch/

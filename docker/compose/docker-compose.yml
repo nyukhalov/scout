@@ -2,6 +2,8 @@ version: "3.3"
 services:
   scout:
     image: "banzzaj/scout-ros-av"
+    environment:
+      - LAUNCH_FILE=scout.launch
     devices:
       - "/dev/ydlidar:/dev/ydlidar"
       - "/dev/input/js0:/dev/input/js0"

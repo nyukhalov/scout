@@ -1,0 +1,24 @@
+<launch>
+
+    <arg name="ctrl_topic_joy" default="/car/control/joystick"/>
+    <arg name="ctrl_topic_auto" default="/car/control/auto"/>
+    <arg name="ctrl_topic_final" default="/car/control"/>
+
+    <node pkg="scout" type="wall_follower_node" name="scout_wall_follower" output="screen">
+        <param name="scan_topic" value="/scan" />
+        <param name="car_control_topic" value="$(arg ctrl_topic_auto)" />
+    </node>
+
+    <node pkg="scout" type="ctrl_multiplexer_node" name="scout_ctrl_multiplexer" output="screen">
+        <param name="ctrl_topic_joy" value="$(arg ctrl_topic_joy)" />
+        <param name="ctrl_topic_auto" value="$(arg ctrl_topic_auto)" />
+        <param name="car_final_control_topic" value="$(arg ctrl_topic_final)" />
+    </node>
+
+    <include file="$(find scout)/launch/joystick.launch">
+        <arg name="car_control_topic" value="$(arg ctrl_topic_joy)"/>
+        <arg name="joystick_profile" value="DesktopDualShock4"/>
+    </include>
+
+</launch>
+

@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+from scout.ros.multiplexer.node import RosControlMultiplexerNode
+
+
+if __name__ == '__main__':
+    RosControlMultiplexerNode().run()
