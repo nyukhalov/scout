@@ -10,8 +10,8 @@
     </node>
 
     <node pkg="scout" type="ctrl_multiplexer_node" name="scout_ctrl_multiplexer" output="screen">
-        <param name="ctrl_topic_joy" value="$(arg ctrl_topic_joy)" />
-        <param name="ctrl_topic_auto" value="$(arg ctrl_topic_auto)" />
+        <param name="car_joystick_control_topic" value="$(arg ctrl_topic_joy)" />
+        <param name="car_auto_control_topic" value="$(arg ctrl_topic_auto)" />
         <param name="car_final_control_topic" value="$(arg ctrl_topic_final)" />
     </node>
 
@@ -20,7 +20,7 @@
     </include>
 
     <include file="$(find scout)/launch/controller.launch">
-        <arg name="car_control_topic value="$(arg ctrl_topic_final)"/>
+        <arg name="car_control_topic" value="$(arg ctrl_topic_final)"/>
     </include>
 
     <include file="$(find ydlidar)/launch/lidar.launch" />
