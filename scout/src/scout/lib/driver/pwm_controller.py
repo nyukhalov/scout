@@ -1,4 +1,5 @@
 from scout.lib.driver import maestro as m
+import rospy
 
 
 class PwmController:
@@ -53,4 +54,5 @@ class PwmController:
         # For servos, target represents the pulse width in of quarter-microseconds
         # Servo center is at 1500 microseconds, or 6000 quarter-microseconds
         # Typcially valid servo range is 3000 to 9000 quarter-microsecond
+        rospy.logwarn(f"channel: {self.channel}, target: {target}")
         self.ctrl.setTarget(self.channel, target)
