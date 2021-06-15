@@ -32,6 +32,8 @@ class PwmController:
         self.ctrl.setAccel(channel, accel)
 
         self._pub = rospy.Publisher("/debug/pwm", Int32, queue_size=1)
+        self._pub2 = rospy.Publisher("/debug/factor", Int32, queue_size=1)
+        self._pub3 = rospy.Publisher("/debug/max_range", Int32, queue_size=1)
 
     def _clip_pwm_value(self, val: int) -> int:
         return max(min(val, self.PWM_MAX), self.PWM_MIN)
@@ -48,6 +50,15 @@ class PwmController:
     def set_target_by_factor(self, factor: float) -> None:
         assert -1.0 <= factor <= 1.0, f"factor value {factor} is out of range"
         max_offset = (self._max_val - self._mid_val) if factor >= 0 else (self._mid_val - self._min_val)
+
+        msg = Int32()
+        msg.data = factor
+        self._pub2.publish(msg)
+
+        msg2 = Int32()
+        msg2.data = max_offset
+        self._pub3.publish(msg2)
+
         target = self._mid_val + int(factor * max_offset)
         self.set_target(target)
 
