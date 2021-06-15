@@ -4,6 +4,7 @@ from typing import List, Optional
 import json
 
 import rospy
+from std_msgs.msg import Float32
 from nav_msgs.msg import Path
 from scout.lib.driver import maestro as m
 from scout.lib.driver.pwm_controller import PwmController
