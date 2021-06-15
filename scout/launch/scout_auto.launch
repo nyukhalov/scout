@@ -17,8 +17,14 @@
 
     <include file="$(find scout)/launch/joystick.launch">
         <arg name="car_control_topic" value="$(arg ctrl_topic_joy)"/>
-        <arg name="joystick_profile" value="DesktopDualShock4"/>
     </include>
+
+    <include file="$(find scout)/launch/controller.launch">
+        <arg name="car_control_topic value="$(arg ctrl_topic_final)"/>
+    </include>
+
+    <include file="$(find ydlidar)/launch/lidar.launch" />
+    <include file="$(find scout)/launch/state_publisher.launch" />
 
 </launch>
 

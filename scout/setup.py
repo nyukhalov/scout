@@ -11,6 +11,7 @@ d = generate_distutils_setup(
         'scout.ros',
         'scout.ros.auto',
         'scout.ros.controller',
+        'scout.ros.multiplexer',
         'scout.ros.joystick',
     ],
     package_dir={'': 'src'}

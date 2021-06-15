@@ -1,0 +1,12 @@
+<launch>
+
+  <arg name="controller_config" default="$(find scout)/config/controller.json"/>
+  <arg name="car_control_topic" default="/car/control"/>
+
+  <node pkg="scout" type="controller_node" name="scout_controller" output="screen">
+    <param name="controller_config" value="$(arg controller_config)" />
+    <param name="car_control_topic" value="$(arg car_control_topic)" />
+  </node>
+
+</launch>
+
