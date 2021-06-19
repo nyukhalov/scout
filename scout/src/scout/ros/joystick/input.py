@@ -17,14 +17,22 @@ class JoystickInput:
 
     @abc.abstractmethod
     def steering(self) -> float:
+        """Return the steering input in the range [0..1]"""
         pass
 
     @abc.abstractmethod
     def throttle(self) -> float:
+        """Return the throttle input in the range [0..1]"""
         pass
 
     @abc.abstractmethod
     def braking(self) -> float:
+        """Return the braking input in the range [0..1]"""
+        pass
+
+    @abc.abstractmethod
+    def is_activate_auto_pressed(self) -> bool:
+        """Return true if the activate auto button is pressed"""
         pass
 
 
@@ -125,6 +133,9 @@ class DualShockInput(JoystickInput):
         if self._l2_initialized:
             return (1 - val) / 2 # 0 .. 1
         return 0
+
+    def is_activate_auto_pressed(self) -> bool:
+        return self._btn_pressed(self._profile.btn_triangle)
 
     def _btn_pressed(self, btn: int) -> bool:
         if self._msg is None:

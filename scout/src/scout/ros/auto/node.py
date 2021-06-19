@@ -77,6 +77,7 @@ class RosWallFollowerNode:
         msg.header.seq = self._seq
         msg.header.stamp = rospy.get_rostime()
         msg.control = CarControl()
+        msg.control.activate_auto = False
         msg.control.actuators = Actuators()
         msg.control.actuators.gas = 0.3
         msg.control.actuators.brake = 0

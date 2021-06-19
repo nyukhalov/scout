@@ -52,6 +52,7 @@ class RosJoystickNode:
         msg.header.seq = self._seq
         msg.header.stamp = rospy.get_rostime()
         msg.control = CarControl()
+        msg.control.activate_auto = self._joy_input.is_activate_auto_pressed()
         msg.control.actuators = Actuators()
         msg.control.actuators.gas = self._joy_input.throttle()
         msg.control.actuators.brake = self._joy_input.braking()
