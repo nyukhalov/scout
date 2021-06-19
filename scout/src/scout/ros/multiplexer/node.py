@@ -45,7 +45,7 @@ class RosControlMultiplexerNode:
 
         # We want to take over when the user steer using the Joystick.
         # The threshold is used to avoid false positives when the stick slightly jitters
-        is_takeover = math.abs(self._last_joy_ctrl_msg.control.actuators.steer) > 0.02
+        is_takeover = abs(self._last_joy_ctrl_msg.control.actuators.steer) > 0.02
         if is_takeover:
             rospy.warn("Activating MANUAL mode")
             self._is_auto = False
