@@ -7,7 +7,7 @@ from scout.lib.pid import PID
 
 class RosWallFollowerNode:
     def __init__(self):
-        rospy.init_node("scout_wall_follower", anonymous=False, log_level=rospy.DEBUG)
+        rospy.init_node("scout_wall_follower", anonymous=False, log_level=rospy.INFO)
         rospy.loginfo("Initializing node")
 
         scan_topic = rospy.get_param("~scan_topic", "/scan")
@@ -66,9 +66,9 @@ class RosWallFollowerNode:
             steer = self._pid.update(dist)
             steer = max(-1, min(1, steer))
             self._send_ctrl_msg(steer)
-            rospy.loginfo(f"range_a={range_a}, range_b={range_b}, dist={dist}, steer={steer}")
+            rospy.logdebug(f"range_a={range_a}, range_b={range_b}, dist={dist}, steer={steer}")
         else:
-            rospy.logwarn(f"range_a={range_a} or range_b={range_b} is not within allowed range [{msg.range_min}, {msg.range_max}]")
+            rospy.logdebug(f"range_a={range_a} or range_b={range_b} is not within allowed range [{msg.range_min}, {msg.range_max}]")
 
     def _send_ctrl_msg(self, steer: float) -> None:
         assert -1 <= steer <= 1
@@ -77,6 +77,7 @@ class RosWallFollowerNode:
         msg.header.seq = self._seq
         msg.header.stamp = rospy.get_rostime()
         msg.control = CarControl()
+        msg.control.activate_auto = False
         msg.control.actuators = Actuators()
         msg.control.actuators.gas = 0.3
         msg.control.actuators.brake = 0

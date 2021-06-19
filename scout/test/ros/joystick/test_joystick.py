@@ -48,6 +48,12 @@ class TestDualShockInput(unittest.TestCase):
         self.assertTrue(ds.is_steering_offset_inc())
         self.assertFalse(ds.is_steering_offset_dec())
 
+    def test_btn_triangle_pressed(self):
+        msg = self._make_msg_from_btns([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        ds = DualShockInput(self._profile)
+        ds.handle_message(msg)
+        self.assertTrue(ds.is_activate_auto_pressed())
+
     def test_ax_l2_fully_released_when_not_initialized(self):
         msg = self._make_msg_from_axes([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.0, -0.0])
         ds = DualShockInput(self._profile)
