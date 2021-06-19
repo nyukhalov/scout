@@ -47,7 +47,7 @@ class RosControlMultiplexerNode:
         # The threshold is used to avoid false positives when the stick slightly jitters
         is_takeover = abs(self._last_joy_ctrl_msg.control.actuators.steer) > 0.02
         if is_takeover:
-            rospy.warn("Activating MANUAL mode")
+            rospy.logwarn("Activating MANUAL mode")
             self._is_auto = False
 
         # republish the joy message when in manual mode

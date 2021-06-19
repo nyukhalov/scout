@@ -7,7 +7,7 @@ from scout.lib.pid import PID
 
 class RosWallFollowerNode:
     def __init__(self):
-        rospy.init_node("scout_wall_follower", anonymous=False, log_level=rospy.DEBUG)
+        rospy.init_node("scout_wall_follower", anonymous=False, log_level=rospy.INFO)
         rospy.loginfo("Initializing node")
 
         scan_topic = rospy.get_param("~scan_topic", "/scan")
