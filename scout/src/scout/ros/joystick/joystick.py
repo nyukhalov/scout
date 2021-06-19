@@ -23,7 +23,7 @@ class RosJoystickNode:
         self._joy_input = DualShockInput(joystick_config.active_profile)
 
         rospy.loginfo(f"Listening Joy messages from {joy_topic}")
-        self._joy_sub = rospy.Subscriber(joy_topic, Joy, self._on_joy_input)
+        self._joy_sub = rospy.Subscriber(joy_topic, Joy, self._on_joy_input, queue_size=1)
 
         rospy.loginfo(f"Publishing control messages to {ctrl_topic}")
         self._ctrl_pub = rospy.Publisher(ctrl_topic, CarControlStamped, queue_size=1)

@@ -16,9 +16,9 @@ class RosControlMultiplexerNode:
 
         # subscribers
         rospy.loginfo(f"Subscribing to {joy_ctrl_topic} for Joystick controls")
-        self._joy_ctrl_sub = rospy.Subscriber(joy_ctrl_topic, CarControlStamped, self._on_joy_ctrl)
+        self._joy_ctrl_sub = rospy.Subscriber(joy_ctrl_topic, CarControlStamped, self._on_joy_ctrl, queue_size=1)
         rospy.loginfo(f"Subscribing to {auto_ctrl_topic} for auto controls")
-        self._auto_ctrl_sub = rospy.Subscriber(auto_ctrl_topic, CarControlStamped, self._on_auto_ctrl)
+        self._auto_ctrl_sub = rospy.Subscriber(auto_ctrl_topic, CarControlStamped, self._on_auto_ctrl, queue_size=1)
 
         # publishers
         self._ctrl_pub = rospy.Publisher(final_ctrl_topic, CarControlStamped, queue_size=1)
