@@ -66,9 +66,9 @@ class RosWallFollowerNode:
             steer = self._pid.update(dist)
             steer = max(-1, min(1, steer))
             self._send_ctrl_msg(steer)
-            rospy.loginfo(f"range_a={range_a}, range_b={range_b}, dist={dist}, steer={steer}")
+            rospy.logdebug(f"range_a={range_a}, range_b={range_b}, dist={dist}, steer={steer}")
         else:
-            rospy.logwarn(f"range_a={range_a} or range_b={range_b} is not within allowed range [{msg.range_min}, {msg.range_max}]")
+            rospy.logdebug(f"range_a={range_a} or range_b={range_b} is not within allowed range [{msg.range_min}, {msg.range_max}]")
 
     def _send_ctrl_msg(self, steer: float) -> None:
         assert -1 <= steer <= 1
