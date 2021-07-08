@@ -1,4 +1,6 @@
 from scout.lib.driver import maestro as m
+from std_msgs.msg import Int32, Float32
+import rospy
 
 
 class PwmController:
@@ -29,6 +31,11 @@ class PwmController:
         # A value of 1 will take the servo about 3s to move between 1ms to 2ms range
         self.ctrl.setAccel(channel, accel)
 
+        if channel == 0:
+            self._pub = rospy.Publisher("/debug/pwm", Int32, queue_size=1)
+            self._pub2 = rospy.Publisher("/debug/factor", Float32, queue_size=1)
+            self._pub3 = rospy.Publisher("/debug/max_range", Int32, queue_size=1)
+
     def _clip_pwm_value(self, val: int) -> int:
         return max(min(val, self.PWM_MAX), self.PWM_MIN)
 
@@ -44,6 +51,16 @@ class PwmController:
     def set_target_by_factor(self, factor: float) -> None:
         assert -1.0 <= factor <= 1.0, f"factor value {factor} is out of range"
         max_offset = (self._max_val - self._mid_val) if factor >= 0 else (self._mid_val - self._min_val)
+
+        if self.channel == 0:
+            msg = Float32()
+            msg.data = factor
+            self._pub2.publish(msg)
+
+            msg2 = Int32()
+            msg2.data = int(max_offset)
+            self._pub3.publish(msg2)
+
         target = self._mid_val + int(factor * max_offset)
         self.set_target(target)
 
@@ -53,4 +70,8 @@ class PwmController:
         # For servos, target represents the pulse width in of quarter-microseconds
         # Servo center is at 1500 microseconds, or 6000 quarter-microseconds
         # Typcially valid servo range is 3000 to 9000 quarter-microsecond
+        if self.channel == 0:
+            msg = Int32()
+            msg.data = target
+            self._pub.publish(msg)
         self.ctrl.setTarget(self.channel, target)
