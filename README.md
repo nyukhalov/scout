@@ -11,7 +11,7 @@ Self-Driving RC Car
 - [Usage on Jetson Nano](./docs/nano-usage.md)
 - [Mapping](./docs/mapping.md)
 
-## Debugging DualShock4
+## Debugging a gamepad (eg DualShock4/XBox controller)
 
 ```bash
 sudo jstest /dev/input/js0

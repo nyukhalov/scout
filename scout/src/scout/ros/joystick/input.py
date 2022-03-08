@@ -2,6 +2,7 @@ import abc
 from typing import Dict
 from sensor_msgs.msg import Joy
 
+
 class JoystickInput:
     @abc.abstractmethod
     def handle_message(self, msg: Joy) -> None:
@@ -42,48 +43,48 @@ class JoystickProfile:
     def from_json(json: Dict) -> "JoystickProfile":
         return JoystickProfile(
             json["name"],
-            json["btn_x"],
-            json["btn_o"],
-            json["btn_triangle"],
-            json["btn_rect"],
-            json["btn_l1"],
-            json["btn_r1"],
-            json["ax_left_horizontal"],
-            json["ax_left_vertical"],
-            json["ax_right_horizontal"],
-            json["ax_right_vertical"],
-            json["ax_l2"],
-            json["ax_r2"]
+            json["btn_down"],
+            json["btn_right"],
+            json["btn_top"],
+            json["btn_left"],
+            json["left_bumper"],
+            json["right_bumper"],
+            json["lsb_horizontal"],
+            json["lsb_vertical"],
+            json["rsb_horizontal"],
+            json["rsb_vertical"],
+            json["left_trigger"],
+            json["right_trigger"]
         )
 
     def __init__(
             self,
             name: str,
-            btn_x: int,
-            btn_o: int,
-            btn_triangle: int,
-            btn_rect: int,
-            btn_l1: int,
-            btn_r1: int,
-            ax_left_horizontal: int,
-            ax_left_vertical: int,
-            ax_right_horizontal: int,
-            ax_right_vertical: int,
-            ax_l2: int,
-            ax_r2: int):
+            btn_down: int,
+            btn_right: int,
+            btn_top: int,
+            btn_left: int,
+            left_bumper: int,
+            right_bumper: int,
+            lsb_horizontal: int,
+            lsb_vertical: int,
+            rsb_horizontal: int,
+            rsb_vertical: int,
+            left_trigger: int,
+            right_trigger: int):
         self.name = name
-        self.btn_x = btn_x
-        self.btn_o = btn_o
-        self.btn_triangle = btn_triangle
-        self.btn_rect = btn_rect
-        self.btn_l1 = btn_l1
-        self.btn_r1 = btn_r1
-        self.ax_left_horizontal = ax_left_horizontal
-        self.ax_left_vertical = ax_left_vertical
-        self.ax_right_horizontal = ax_right_horizontal
-        self.ax_right_vertical = ax_right_vertical
-        self.ax_l2 = ax_l2
-        self.ax_r2 = ax_r2
+        self.btn_down = btn_down
+        self.btn_right = btn_right
+        self.btn_top = btn_top
+        self.btn_left = btn_left
+        self.left_bumper = left_bumper
+        self.right_bumper = right_bumper
+        self.lsb_horizontal = lsb_horizontal
+        self.lsb_vertical = lsb_vertical
+        self.rsb_horizontal = rsb_horizontal
+        self.rsb_vertical = rsb_vertical
+        self.left_trigger = left_trigger
+        self.right_trigger = right_trigger
 
     def __str__(self) -> str:
         return str(vars(self))
@@ -97,8 +98,8 @@ class DualShockInput(JoystickInput):
         self._profile = profile
         self._msg = None
         self._prev_buttons = None
-        self._l2_initialized = False
-        self._r2_initialized = False
+        self._left_trigger_initialized = False
+        self._right_trigger_initialized = False
 
     def handle_message(self, msg: Joy) -> None:
         if self._msg:
@@ -106,36 +107,36 @@ class DualShockInput(JoystickInput):
         self._msg = msg
 
     def is_steering_offset_dec(self) -> bool:
-        btn = self._profile.btn_l1
+        btn = self._profile.left_bumper
         return self._btn_updated(btn) and self._btn_pressed(btn)
 
     def is_steering_offset_inc(self) -> bool:
-        btn = self._profile.btn_r1
+        btn = self._profile.right_bumper
         return self._btn_updated(btn) and self._btn_pressed(btn)
 
     def steering(self) -> float:
-        return -self._ax_value(self._profile.ax_left_horizontal)
+        return -self._ax_value(self._profile.lsb_horizontal)
 
     def throttle(self) -> float:
-        val = self._ax_value(self._profile.ax_r2)
+        val = self._ax_value(self._profile.right_trigger)
         assert -1.0 <= val <= 1.0
-        if not self._r2_initialized and val != 0.0:
-            self._r2_initialized = True
-        if self._r2_initialized:
-            return (1 - val) / 2 # 0 .. 1
+        if not self._right_trigger_initialized and val != 0.0:
+            self._right_trigger_initialized = True
+        if self._right_trigger_initialized:
+            return (1 - val) / 2  # 0 .. 1
         return 0
 
     def braking(self) -> float:
-        val = self._ax_value(self._profile.ax_l2)
+        val = self._ax_value(self._profile.left_trigger)
         assert -1.0 <= val <= 1.0
-        if not self._l2_initialized and val != 0.0:
-            self._l2_initialized = True
-        if self._l2_initialized:
-            return (1 - val) / 2 # 0 .. 1
+        if not self._left_trigger_initialized and val != 0.0:
+            self._left_trigger_initialized = True
+        if self._left_trigger_initialized:
+            return (1 - val) / 2  # 0 .. 1
         return 0
 
     def is_activate_auto_pressed(self) -> bool:
-        return self._btn_pressed(self._profile.btn_triangle)
+        return self._btn_pressed(self._profile.btn_top)
 
     def _btn_pressed(self, btn: int) -> bool:
         if self._msg is None:

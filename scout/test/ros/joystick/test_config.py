@@ -10,18 +10,18 @@ class TestJoystickCOnfig(unittest.TestCase):
             "profiles": [
                 {
                     "name": "my_config",
-                    "btn_x": 1,
-                    "btn_o": 2,
-                    "btn_triangle": 3,
-                    "btn_rect": 4,
-                    "btn_l1": 5,
-                    "btn_r1": 6,
-                    "ax_left_horizontal": 7,
-                    "ax_left_vertical": 8,
-                    "ax_right_horizontal": 9,
-                    "ax_right_vertical": 10,
-                    "ax_l2": 11,
-                    "ax_r2": 12
+                    "btn_down": 1,
+                    "btn_right": 2,
+                    "btn_top": 3,
+                    "btn_left": 4,
+                    "left_bumper": 5,
+                    "right_bumper": 6,
+                    "lsb_horizontal": 7,
+                    "lsb_vertical": 8,
+                    "rsb_horizontal": 9,
+                    "rsb_vertical": 10,
+                    "left_trigger": 11,
+                    "right_trigger": 12
                 }
             ]
         }
@@ -29,16 +29,16 @@ class TestJoystickCOnfig(unittest.TestCase):
         config_json = json.loads(json_str)
         config = JoystickConfig.from_json(config_json, "my_config")
         self.assertEquals("my_config", config.active_profile.name)
-        self.assertEquals(1, config.active_profile.btn_x)
-        self.assertEquals(2, config.active_profile.btn_o)
-        self.assertEquals(3, config.active_profile.btn_triangle)
-        self.assertEquals(4, config.active_profile.btn_rect)
-        self.assertEquals(5, config.active_profile.btn_l1)
-        self.assertEquals(6, config.active_profile.btn_r1)
-        self.assertEquals(7, config.active_profile.ax_left_horizontal)
-        self.assertEquals(8, config.active_profile.ax_left_vertical)
-        self.assertEquals(9, config.active_profile.ax_right_horizontal)
-        self.assertEquals(10, config.active_profile.ax_right_vertical)
-        self.assertEquals(11, config.active_profile.ax_l2)
-        self.assertEquals(12, config.active_profile.ax_r2)
+        self.assertEquals(1, config.active_profile.btn_down)
+        self.assertEquals(2, config.active_profile.btn_right)
+        self.assertEquals(3, config.active_profile.btn_top)
+        self.assertEquals(4, config.active_profile.btn_left)
+        self.assertEquals(5, config.active_profile.left_bumper)
+        self.assertEquals(6, config.active_profile.right_bumper)
+        self.assertEquals(7, config.active_profile.lsb_horizontal)
+        self.assertEquals(8, config.active_profile.lsb_vertical)
+        self.assertEquals(9, config.active_profile.rsb_horizontal)
+        self.assertEquals(10, config.active_profile.rsb_vertical)
+        self.assertEquals(11, config.active_profile.left_trigger)
+        self.assertEquals(12, config.active_profile.right_trigger)
 
