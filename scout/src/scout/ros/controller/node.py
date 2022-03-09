@@ -72,8 +72,8 @@ class RosControllerNode:
         steer_offset_inc = msg.control.calibration.steer_offset_inc
 
         if steer_offset_inc != 0:
-            rospy.loginfo(f"Setting new PWM steering offset: {new_offset}")
             new_offset = self.steering_ctrl.get_offset() + steer_offset_inc
+            rospy.loginfo(f"Setting new PWM steering offset: {new_offset}")
             self.steering_ctrl.set_offset(new_offset)
 
         self.steering_ctrl.set_target_by_factor(steer)

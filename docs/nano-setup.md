@@ -4,11 +4,13 @@
 wget -O - https://raw.githubusercontent.com/nyukhalov/scout/master/scripts/setup-nano.sh | sudo bash
 ```
 
-## Connecting a DualShock 4 controller via bluetooth
+## Connecting a gamepad via bluetooth
 
 ```bash
 # Turn on scanning and and put a controller to the pairing mode
-# by pressing and holding Share + PS buttons.
+# by pressing and holding 
+# * DualShock: Share + PS buttons
+# * XBox: XBox button
 # Wait until the controller is found by the tool.
 bluetoothctl scan on
 

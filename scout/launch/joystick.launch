@@ -1,7 +1,7 @@
 <launch>
 
   <arg name="joystick_config" default="$(find scout)/config/joystick.json"/>
-  <arg name="joystick_profile" default="JetsonDualShock4"/>
+  <arg name="joystick_profile" default="DesktopXbox"/>
   <arg name="car_control_topic" default="/car/control/joystick"/>
 
   <node pkg="scout" type="joystick_node" name="scout_joystick" output="screen">
